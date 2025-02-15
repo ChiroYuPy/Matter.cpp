@@ -61,8 +61,20 @@ build CMakeFiles/untitled2.dir/src/World.cpp.o: CXX_COMPILER__untitled2_unscanne
   OBJECT_DIR = CMakeFiles/untitled2.dir
   OBJECT_FILE_DIR = CMakeFiles/untitled2.dir/src
 
+build CMakeFiles/untitled2.dir/src/Quadtree.cpp.o: CXX_COMPILER__untitled2_unscanned_Debug /home/adrian/CLionProjects/untitled2/src/Quadtree.cpp || cmake_object_order_depends_target_untitled2
+  DEP_FILE = CMakeFiles/untitled2.dir/src/Quadtree.cpp.o.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/untitled2.dir
+  OBJECT_FILE_DIR = CMakeFiles/untitled2.dir/src
+
 build CMakeFiles/untitled2.dir/src/Particle.cpp.o: CXX_COMPILER__untitled2_unscanned_Debug /home/adrian/CLionProjects/untitled2/src/Particle.cpp || cmake_object_order_depends_target_untitled2
   DEP_FILE = CMakeFiles/untitled2.dir/src/Particle.cpp.o.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/untitled2.dir
+  OBJECT_FILE_DIR = CMakeFiles/untitled2.dir/src
+
+build CMakeFiles/untitled2.dir/src/Constraint.cpp.o: CXX_COMPILER__untitled2_unscanned_Debug /home/adrian/CLionProjects/untitled2/src/Constraint.cpp || cmake_object_order_depends_target_untitled2
+  DEP_FILE = CMakeFiles/untitled2.dir/src/Constraint.cpp.o.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles/untitled2.dir
   OBJECT_FILE_DIR = CMakeFiles/untitled2.dir/src
@@ -75,7 +87,7 @@ build CMakeFiles/untitled2.dir/src/Particle.cpp.o: CXX_COMPILER__untitled2_unsca
 #############################################
 # Link the executable untitled2
 
-build untitled2: CXX_EXECUTABLE_LINKER__untitled2_Debug CMakeFiles/untitled2.dir/main.cpp.o CMakeFiles/untitled2.dir/src/World.cpp.o CMakeFiles/untitled2.dir/src/Particle.cpp.o | /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.6.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.6.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.6.1
+build untitled2: CXX_EXECUTABLE_LINKER__untitled2_Debug CMakeFiles/untitled2.dir/main.cpp.o CMakeFiles/untitled2.dir/src/World.cpp.o CMakeFiles/untitled2.dir/src/Quadtree.cpp.o CMakeFiles/untitled2.dir/src/Particle.cpp.o CMakeFiles/untitled2.dir/src/Constraint.cpp.o | /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.6.1 /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.6.1 /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.6.1
   FLAGS = -g
   LINK_LIBRARIES = /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.6.1  /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.6.1  /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.6.1
   OBJECT_DIR = CMakeFiles/untitled2.dir

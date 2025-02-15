@@ -8,7 +8,9 @@ find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 add_executable(untitled2
         main.cpp
         src/World.cpp
+        src/Quadtree.cpp
         src/Particle.cpp
+        src/Constraint.cpp
 )
 
 target_link_libraries(untitled2 sfml-graphics sfml-window sfml-system)
