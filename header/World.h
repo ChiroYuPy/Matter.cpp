@@ -16,11 +16,21 @@ class World {
 public:
     World(sf::RenderWindow &window);
 
+    void createRandomParticles(int count);
+
     void update(float dt);
 
-    std::vector<Particle> getParticles();
+    void createGrid(int rows, int cols, float spacing, sf::Vector2f startPos);
 
-    std::vector<Constraint> getConstraints();
+    void createGridConstraints(int rows, int cols, float spacing);
+
+    void createCirclePattern(int count, float radius, sf::Vector2f center);
+
+    void addConstraint(int idx1, int idx2, float length);
+
+    std::vector<Particle>& getParticles();
+
+    std::vector<Constraint>& getConstraints();
 
 private:
     sf::FloatRect bounds;
