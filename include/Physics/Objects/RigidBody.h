@@ -12,15 +12,13 @@ class RigidBody : public Particle {
 public:
     RigidBody(Vector2f position, float mass, float friction);
 
-    virtual void Update(float dt) override;
+    [[nodiscard]] virtual AABB GetAABB() const = 0;
 
-    virtual AABB GetAABB() const = 0;
-
-    virtual BodyType GetType() const = 0;
+    [[nodiscard]] virtual BodyType GetType() const = 0;
 
     void SetFriction(float newFriction);
 
-    float GetFriction() const;
+    [[nodiscard]] float getFriction() const;
 
 protected:
     float friction;

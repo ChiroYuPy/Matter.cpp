@@ -1,12 +1,9 @@
 #include "Physics/World.h"
 
-#include <iostream>
-#include <ostream>
-
 #include "Physics/Solver.h"
 #include <vector>
 
-World::World(Vector2f gravity) : gravity(gravity) {
+World::World(const Vector2f gravity) : gravity(gravity) {
 }
 
 void World::AddParticle(Particle *particle) {
@@ -21,13 +18,14 @@ void World::AddJoin(Join *join) {
     joins.push_back(join);
 }
 
-void World::Update(float dt) {
+void World::Update(const float dt) {
     StepWorld(dt);
 }
 
-void World::StepWorld(float dt) {
+void World::StepWorld(const float dt) {
     // natural physics modifications
     ApplyGravity();
+    ApplyAirFriction();
 
     // objects update
     StepJoins(dt);
@@ -37,14 +35,14 @@ void World::StepWorld(float dt) {
     DetectCollisions();
 }
 
-void World::StepObjects(float dt) {
+void World::StepObjects(const float dt) {
     for (RigidBody *body: rigidBodies) {
         body->Update(dt);
     }
 }
 
-void World::StepJoins(float dt) {
-    for (Join *join: joins) {
+void World::StepJoins(const float dt) const {
+    for (const Join *join: joins) {
         join->update(dt);
     }
 }
@@ -53,6 +51,14 @@ void World::ApplyGravity() const {
     for (RigidBody *body: rigidBodies) {
         if (!body->IsInert()) {
             body->ApplyAcceleration(gravity);
+        }
+    }
+}
+
+void World::ApplyAirFriction() const {
+    for (RigidBody *body: rigidBodies) {
+        if (!body->IsInert()) {
+            body->getVelocity(body->getVelocity() * (1.0f - body->getFriction()));
         }
     }
 }
@@ -84,8 +90,7 @@ void World::BroadPhase() {
 
 void World::NarrowPhase() {
     for (const CollisionPair &pair: collisionPairs) {
-        CollisionInfo collision = Collisioner::TestCollision(pair.bodyA, pair.bodyB);
-        if (collision.collided) {
+        if (CollisionInfo collision = Collisioner::TestCollision(pair.bodyA, pair.bodyB); collision.collided) {
             Solver::ResolveCollision(pair.bodyA, pair.bodyB, collision);
         }
     }

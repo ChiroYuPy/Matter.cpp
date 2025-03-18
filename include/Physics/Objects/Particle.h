@@ -20,8 +20,8 @@ public:
     [[nodiscard]] Vector2f GetPosition() const { return position; };
     void SetPosition(const Vector2f newPosition) { position = newPosition; };
 
-    [[nodiscard]] Vector2f GetVelocity() const { return velocity; };
-    void SetVelocity(const Vector2f newPosition) { velocity = newPosition; };
+    [[nodiscard]] Vector2f getVelocity() const { return velocity; };
+    void getVelocity(const Vector2f newPosition) { velocity = newPosition; };
     
     [[nodiscard]] bool IsInert() const { return inert; };
     void SetInert(const bool newInert) { inert = newInert; };

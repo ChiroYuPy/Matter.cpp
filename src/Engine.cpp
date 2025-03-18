@@ -8,7 +8,7 @@ void Engine::Run() {
     sf::Clock clock;
 
     while (window.isOpen()) {
-        float dt = clock.restart().asSeconds();
+        const float dt = clock.restart().asSeconds();
         ProcessEvents();
         Update(dt);
         Render();
@@ -39,7 +39,7 @@ void Engine::ProcessEvents() {
 
 void Engine::ClampPosition(RigidBody *body) const {
     Vector2 position = body->GetPosition();
-    Vector2 velocity = body->GetVelocity();
+    Vector2 velocity = body->getVelocity();
 
     const float half_width = body->GetAABB().getWidth() / 2;
     const float half_height = body->GetAABB().getHeight() / 2;
@@ -66,7 +66,7 @@ void Engine::ClampPosition(RigidBody *body) const {
     }
 
     body->SetPosition(position);
-    body->SetVelocity(velocity);
+    body->getVelocity(velocity);
 }
 
 
@@ -76,7 +76,7 @@ void Engine::Update(const float dt) {
     if (selectedObject != nullptr) {
         const sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         selectedObject->SetPosition(Vector2(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)));
-        selectedObject->SetVelocity(Vector2f(0, 0));
+        selectedObject->getVelocity(Vector2f(0, 0));
     }
 
     for (const auto body: world.GetRigidBodies()) {
@@ -111,7 +111,7 @@ void Engine::Render() {
             circle.setPosition(ball->GetPosition().x - ball->GetRadius(),
                                ball->GetPosition().y - ball->GetRadius());
 
-            float speed = Vector2f::Length(ball->GetVelocity());
+            float speed = Vector2f::Length(ball->getVelocity());
             float ratio = std::min(speed / maxSpeed, 1.0f);
 
             if (!ball->IsInert()) {
@@ -131,7 +131,7 @@ void Engine::Render() {
                     convex.setPoint(i, sf::Vector2f(vertices[i].x, vertices[i].y));
                 }
 
-                float speed = Vector2f::Length(poly->GetVelocity());
+                float speed = Vector2f::Length(poly->getVelocity());
                 float ratio = std::min(speed / maxSpeed, 1.0f);
 
                 if (!poly->IsInert()) {

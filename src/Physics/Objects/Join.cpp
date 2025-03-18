@@ -5,33 +5,33 @@
 #include "Physics/Objects/Join.h"
 #include <cmath>
 
-Join::Join(Particle& objA, Particle& objB, float length, float stiffness, float damping)
+Join::Join(Particle& objA, Particle& objB, const float length, const float stiffness, const float damping)
     : objA(objA), objB(objB), length(length), stiffness(stiffness), damping(damping) {
 }
 
-void Join::update(float dt) {
+void Join::update(const float dt) const {
 
-    Vector2 deltaP = objB.GetPosition() - objA.GetPosition();
-  	Vector2 deltaV = objB.GetVelocity() - objA.GetVelocity();
+    const Vector2 deltaP = objB.GetPosition() - objA.GetPosition();
+  	const Vector2 deltaV = objB.getVelocity() - objA.getVelocity();
 
-    float distance = std::sqrt(deltaP.x * deltaP.x + deltaP.y * deltaP.y);
+    const float distance = std::sqrt(deltaP.x * deltaP.x + deltaP.y * deltaP.y);
     if (distance == 0) return;
 
-    Vector2 direction = deltaP / distance;
+    const Vector2 direction = deltaP / distance;
 
-    float displacement = distance - length;
-    float spring_force_magnitude = displacement * stiffness;
+    const float displacement = distance - length;
+    const float spring_force_magnitude = displacement * stiffness;
 
-    float dot_product = direction.x * deltaV.x + direction.y * deltaV.y;
-    float damping_force_magnitude = dot_product * damping;
+    const float dot_product = direction.x * deltaV.x + direction.y * deltaV.y;
+    const float damping_force_magnitude = dot_product * damping;
 
-    float total_force_magnitude = spring_force_magnitude + damping_force_magnitude;
+    const float total_force_magnitude = spring_force_magnitude + damping_force_magnitude;
 
     // if (total_force_magnitude > max_force && max_force != 0.f) {
     //     broken = true;
     // }
 
-    Vector2 force = direction * total_force_magnitude;
+    const Vector2 force = direction * total_force_magnitude;
     objA.ApplyForce(force);
     objB.ApplyForce( - force);
 }

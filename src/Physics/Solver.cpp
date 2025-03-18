@@ -24,7 +24,7 @@ void Solver::ApplySeparation(RigidBody *bodyA, RigidBody *bodyB, const Collision
 }
 
 void Solver::ApplyImpulse(RigidBody *bodyA, RigidBody *bodyB, const CollisionInfo &collision) {
-    const Vector2f relativeVelocity = bodyA->GetVelocity() - bodyB->GetVelocity();
+    const Vector2f relativeVelocity = bodyA->getVelocity() - bodyB->getVelocity();
 
     if (const float velocityAlongNormal = Vector2f::Dot(relativeVelocity, collision.normal); velocityAlongNormal < 0) {
         constexpr float restitution = 1.f;
@@ -32,7 +32,7 @@ void Solver::ApplyImpulse(RigidBody *bodyA, RigidBody *bodyB, const CollisionInf
         impulse /= (1 / bodyA->GetMass() + 1 / bodyB->GetMass());
 
         const Vector2f impulseVector = collision.normal * impulse;
-        bodyA->SetVelocity(bodyA->GetVelocity() + impulseVector / bodyA->GetMass());
-        bodyB->SetVelocity(bodyB->GetVelocity() - impulseVector / bodyB->GetMass());
+        bodyA->getVelocity(bodyA->getVelocity() + impulseVector / bodyA->GetMass());
+        bodyB->getVelocity(bodyB->getVelocity() - impulseVector / bodyB->GetMass());
     }
 }

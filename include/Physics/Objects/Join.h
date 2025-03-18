@@ -11,7 +11,7 @@ class Join {
 public:
     Join(Particle &objA, Particle &objB, float length, float stiffness, float damping);
 
-    void update(float dt);
+    void update(float dt) const;
 
     Particle *GetBodyA() const { return &objA; }
     Particle *GetBodyB() const { return &objB; }
