@@ -104,8 +104,6 @@ auto constraint = world.createConstraint(box, ball, 100); // Distance fixe de 10
 
 ## 📌 Exemples et Démonstrations
 - **RigidBody Demo** : Simulation de boîtes et cercles en collision
-- **SoftBody Demo** : Simulation d’un tissu élastique
-- **Car Physics** : Voiture avec suspension et contraintes
 
 ---
 
