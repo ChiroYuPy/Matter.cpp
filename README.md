@@ -65,7 +65,7 @@ int main() {
     Matter::World world;
 
     // Création d'un softbody composé de particules
-    auto softbody = world.createSoftBody(300, 300, 5, 5, 10, mass); // x, y, rows, cols, spacing, mass
+    auto softbody = world.createSoftBody(300, 300, 5, 5, 10, 12); // x, y, rows, cols, spacing, mass
     softbody->setElasticity(0.9);
     softbody->setDamping(0.1);
 
