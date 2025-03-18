@@ -16,7 +16,6 @@ int main() {
     std::mt19937 gen(rd());
 
     std::vector<RigidBody *> objects;
-
     const float radius = 8.0f;  // Rayon des balles
     const float horizontalDistance = 8.0f * radius;  // Distance horizontale entre les balles
     const float verticalDistance = std::sqrt(8.0f) * radius;  // Distance verticale entre les balles
