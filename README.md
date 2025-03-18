@@ -44,12 +44,13 @@ int main() {
     Matter::World world;
 
     // Création d'une boîte et d'une balle
-    auto box = world.createBody(Matter::Box(200, 100, 50, 50)); // x, y, width, height
-    auto ball = world.createBody(Matter::Circle(250, 200, 20)); // x, y, radius
+    auto box = world.createRigidBody(Shape::Box, 200, 100, 50, 50, 1); // shape, x, y, width, height, mass
+    auto ball = world.createRigidBody(Shape::Circle, 250, 200, 20, 1); // shape, x, y, radius, ùass
 
-    while (world.running()) {
-        world.update(1.0 / 60.0);  // Simulation 60 FPS
-        world.render();  // Nécessite SFML si activé
+    boolean running = true;
+    while (running) {
+        world.update(1.0 / 60.0);  // 60 FPS
+        // rendering
     }
 
     return 0;
@@ -64,13 +65,14 @@ int main() {
     Matter::World world;
 
     // Création d'un softbody composé de particules
-    auto softbody = world.createSoftBody(300, 300, 5, 5, 10); // x, y, rows, cols, spacing
+    auto softbody = world.createSoftBody(300, 300, 5, 5, 10, mass); // x, y, rows, cols, spacing, mass
     softbody->setElasticity(0.9);
     softbody->setDamping(0.1);
 
-    while (world.running()) {
-        world.update(1.0 / 60.0);
-        world.render();
+    boolean running = true;
+    while (running) {
+        world.update(1.0 / 60.0);  // 60 FPS
+        // rendering
     }
 
     return 0;
