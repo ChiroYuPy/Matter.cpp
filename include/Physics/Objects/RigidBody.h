@@ -13,10 +13,13 @@ public:
     RigidBody(Vector2f position, float mass, float friction);
 
     virtual void Update(float dt) override;
+
     virtual AABB GetAABB() const = 0;
+
     virtual BodyType GetType() const = 0;
 
     void SetFriction(float newFriction);
+
     float GetFriction() const;
 
 protected:

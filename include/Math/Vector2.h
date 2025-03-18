@@ -7,37 +7,50 @@
 #include <cmath>
 #include <iostream>
 
-template <typename T>
+template<typename T>
 struct Vector2 {
     T x, y;
 
     Vector2();
+
     Vector2(T x, T y);
 
     Vector2 operator+(const Vector2 &other) const;
+
     Vector2 operator-(const Vector2 &other) const;
+
     Vector2 operator-() const;
 
     Vector2 operator*(T scalar) const;
+
     Vector2 operator/(T scalar) const;
 
     Vector2 &operator+=(const Vector2 &other);
+
     Vector2 &operator-=(const Vector2 &other);
+
     Vector2 &operator*=(T scalar);
+
     Vector2 &operator/=(T scalar);
 
     static T Magnitude(const Vector2 &a);
+
     static Vector2 Normalize(const Vector2 &a);
+
     static T Dot(const Vector2 &a, const Vector2 &b);
+
     static T Length(const Vector2 &a);
+
     static T LengthSquared(const Vector2 &a);
+
     static T Distance(const Vector2 &a, const Vector2 &b);
+
     static Vector2 Lerp(const Vector2 &a, const Vector2 &b, T t);
 };
 
 // Vector2 printing
-template <typename T>
-std::ostream& operator<<(std::ostream& os, const Vector2<T>& v);
+template<typename T>
+std::ostream &operator<<(std::ostream &os, const Vector2<T> &v);
 
 // Vector2 aliases
 using Vector2i = Vector2<int>;

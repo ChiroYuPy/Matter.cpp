@@ -26,7 +26,6 @@ void World::Update(float dt) {
 }
 
 void World::StepWorld(float dt) {
-
     // natural physics modifications
     ApplyGravity();
 
@@ -59,7 +58,6 @@ void World::ApplyGravity() const {
 }
 
 void World::DetectCollisions() {
-
     // preliminary detection
     BroadPhase();
 
@@ -72,8 +70,8 @@ void World::BroadPhase() {
 
     for (size_t i = 0; i < rigidBodies.size(); ++i) {
         for (size_t j = i + 1; j < rigidBodies.size(); ++j) {
-            RigidBody* bodyA = rigidBodies[i];
-            RigidBody* bodyB = rigidBodies[j];
+            RigidBody *bodyA = rigidBodies[i];
+            RigidBody *bodyB = rigidBodies[j];
 
             if (bodyA->IsInert() and bodyB->IsInert()) continue;
 

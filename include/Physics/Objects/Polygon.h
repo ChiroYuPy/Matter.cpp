@@ -13,11 +13,14 @@ protected:
     std::vector<Vector2f> vertices;
 
 public:
-    Polygon(const Vector2f& position, float mass, float friction, const std::vector<Vector2f>& verts);
+    Polygon(const Vector2f &position, float mass, float friction, const std::vector<Vector2f> &verts);
 
     void Update(float dt) override;
+
     [[nodiscard]] AABB GetAABB() const override;
-    [[nodiscard]] const std::vector<Vector2f>& GetVertices() const;
+
+    [[nodiscard]] const std::vector<Vector2f> &GetVertices() const;
+
     [[nodiscard]] BodyType GetType() const override { return BodyType::Polygon; }
 };
 

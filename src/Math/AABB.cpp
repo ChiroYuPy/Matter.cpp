@@ -4,14 +4,15 @@
 
 #include "Math/AABB.h"
 
-AABB::AABB(const Vector2f min, const Vector2f max) : min(min), max(max) {}
+AABB::AABB(const Vector2f min, const Vector2f max) : min(min), max(max) {
+}
 
-bool AABB::intersect(const AABB& other) const {
+bool AABB::intersect(const AABB &other) const {
     return (min.x < other.max.x && max.x > other.min.x &&
             min.y < other.max.y && max.y > other.min.y);
 }
 
-bool AABB::contain(const Vector2f& point) const {
+bool AABB::contain(const Vector2f &point) const {
     return (point.x >= min.x && point.x <= max.x &&
             point.y >= min.y && point.y <= max.y);
 }

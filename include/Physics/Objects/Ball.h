@@ -10,8 +10,11 @@ public:
     Ball(Vector2f position, float radius, float mass, float friction);
 
     void Update(float dt) override;
+
     [[nodiscard]] AABB GetAABB() const override;
+
     [[nodiscard]] float GetRadius() const;
+
     [[nodiscard]] BodyType GetType() const override { return BodyType::Ball; }
 
 private:

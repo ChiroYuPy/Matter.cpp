@@ -52,7 +52,8 @@ int main() {
 
     for (int i = 0; i < 11; ++i) {
         constexpr float ballMass = 5.f;
-        auto ball = new Ball(Vector2f(startPosition.x + static_cast<float>(i) * jointLength, startPosition.y), ballRadius, ballMass, 0.f);
+        auto ball = new Ball(Vector2f(startPosition.x + static_cast<float>(i) * jointLength, startPosition.y),
+                             ballRadius, ballMass, 0.f);
         ball->SetInert(false);
         world.AddRigidBody(ball);
         ropeBalls.push_back(ball);
@@ -82,10 +83,10 @@ int main() {
     world.Clear();
 
     // Nettoyage mémoire
-    for (const RigidBody *obj : objects) {
+    for (const RigidBody *obj: objects) {
         delete obj;
     }
-    for (const Ball *ball : ropeBalls) {
+    for (const Ball *ball: ropeBalls) {
         delete ball;
     }
 

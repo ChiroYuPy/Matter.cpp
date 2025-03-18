@@ -86,7 +86,8 @@ void Engine::Update(const float dt) {
 
 void Engine::HandleMouseClick(const sf::Vector2i &mousePos) {
     for (RigidBody *rb: world.GetRigidBodies()) {
-        if (AABB aabb = rb->GetAABB(); aabb.contain(Vector2(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))) {
+        if (AABB aabb = rb->GetAABB(); aabb.contain(Vector2(static_cast<float>(mousePos.x),
+                                                            static_cast<float>(mousePos.y)))) {
             selectedObject = rb;
             break;
         }
@@ -122,10 +123,8 @@ void Engine::Render() {
             }
 
             window.draw(circle);
-        }
-
-        else if (auto *poly = dynamic_cast<Polygon *>(rb)) {
-            if (const std::vector<Vector2f>& vertices = poly->GetVertices(); !vertices.empty()) {
+        } else if (auto *poly = dynamic_cast<Polygon *>(rb)) {
+            if (const std::vector<Vector2f> &vertices = poly->GetVertices(); !vertices.empty()) {
                 sf::ConvexShape convex;
                 convex.setPointCount(vertices.size());
                 for (size_t i = 0; i < vertices.size(); ++i) {

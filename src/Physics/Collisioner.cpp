@@ -3,20 +3,20 @@
 #include "Physics/Objects/Box.h"
 #include <iostream>
 
-CollisionInfo Collisioner::TestCollision(RigidBody* rb1, RigidBody* rb2) {
+CollisionInfo Collisioner::TestCollision(RigidBody *rb1, RigidBody *rb2) {
     auto collisionInfo = CollisionInfo(false, Vector2f(), 0.0f);
 
-    if (const auto* ball1 = dynamic_cast<Ball*>(rb1)) {
-        if (const auto* ball2 = dynamic_cast<Ball*>(rb2)) {
+    if (const auto *ball1 = dynamic_cast<Ball *>(rb1)) {
+        if (const auto *ball2 = dynamic_cast<Ball *>(rb2)) {
             collisionInfo = TestBallsCollision(ball1, ball2);
-        } else if (const auto* poly2 = dynamic_cast<Polygon*>(rb2)) {
+        } else if (const auto *poly2 = dynamic_cast<Polygon *>(rb2)) {
             collisionInfo = TestBallPolygonCollision(ball1, poly2);
-            collisionInfo.normal = - collisionInfo.normal;
+            collisionInfo.normal = -collisionInfo.normal;
         }
-    } else if (const auto* poly1 = dynamic_cast<Polygon*>(rb1)) {
-        if (const auto* ball2 = dynamic_cast<Ball*>(rb2)) {
+    } else if (const auto *poly1 = dynamic_cast<Polygon *>(rb1)) {
+        if (const auto *ball2 = dynamic_cast<Ball *>(rb2)) {
             collisionInfo = TestBallPolygonCollision(ball2, poly1);
-        } else if (const auto* poly2 = dynamic_cast<Polygon*>(rb2)) {
+        } else if (const auto *poly2 = dynamic_cast<Polygon *>(rb2)) {
             collisionInfo = TestPolygonsCollision(poly1, poly2);
         }
     }
@@ -24,7 +24,7 @@ CollisionInfo Collisioner::TestCollision(RigidBody* rb1, RigidBody* rb2) {
     return collisionInfo;
 }
 
-CollisionInfo Collisioner::TestBallsCollision(const Ball* ball1, const Ball* ball2) {
+CollisionInfo Collisioner::TestBallsCollision(const Ball *ball1, const Ball *ball2) {
     const Vector2 distance = ball1->GetPosition() - ball2->GetPosition();
 
     if (const float radiusSum = ball1->GetRadius() + ball2->GetRadius(); Vector2f::Length(distance) <= radiusSum) {
@@ -38,8 +38,8 @@ CollisionInfo Collisioner::TestBallsCollision(const Ball* ball1, const Ball* bal
     return {false, Vector2f(), 0.0f};
 }
 
-CollisionInfo Collisioner::TestBallPolygonCollision(const Ball* ball, const Polygon* poly) {
-    const std::vector<Vector2f>& vertices = poly->GetVertices();
+CollisionInfo Collisioner::TestBallPolygonCollision(const Ball *ball, const Polygon *poly) {
+    const std::vector<Vector2f> &vertices = poly->GetVertices();
     const Vector2f ballPos = ball->GetPosition();
     const float ballRadius = ball->GetRadius();
 
@@ -93,9 +93,9 @@ CollisionInfo Collisioner::TestBallPolygonCollision(const Ball* ball, const Poly
 }
 
 
-CollisionInfo Collisioner::TestPolygonsCollision(const Polygon* poly1, const Polygon* poly2) {
-    const std::vector<Vector2f>& vertices1 = poly1->GetVertices();
-    const std::vector<Vector2f>& vertices2 = poly2->GetVertices();
+CollisionInfo Collisioner::TestPolygonsCollision(const Polygon *poly1, const Polygon *poly2) {
+    const std::vector<Vector2f> &vertices1 = poly1->GetVertices();
+    const std::vector<Vector2f> &vertices2 = poly2->GetVertices();
 
     Vector2f normal(0, 0);
     float depth = std::numeric_limits<float>::infinity();
@@ -144,11 +144,11 @@ CollisionInfo Collisioner::TestPolygonsCollision(const Polygon* poly1, const Pol
 }
 
 
-std::pair<float, float> Collisioner::projectVertices(const std::vector<Vector2f>& vertices, const Vector2f& axis) {
+std::pair<float, float> Collisioner::projectVertices(const std::vector<Vector2f> &vertices, const Vector2f &axis) {
     float minProj = std::numeric_limits<float>::infinity();
     float maxProj = -std::numeric_limits<float>::infinity();
 
-    for (const Vector2f& v : vertices) {
+    for (const Vector2f &v: vertices) {
         const float proj = Vector2f::Dot(v, axis);
         if (proj < minProj) minProj = proj;
         if (proj > maxProj) maxProj = proj;
@@ -157,7 +157,7 @@ std::pair<float, float> Collisioner::projectVertices(const std::vector<Vector2f>
     return {minProj, maxProj};
 }
 
-std::pair<float, float> Collisioner::projectCircle(const Vector2f& center, float radius, const Vector2f& axis) {
+std::pair<float, float> Collisioner::projectCircle(const Vector2f &center, float radius, const Vector2f &axis) {
     const Vector2f direction = Vector2f::Normalize(axis);
     const auto directionAndRadius = Vector2(direction.x * radius, direction.y * radius);
 
@@ -172,13 +172,13 @@ std::pair<float, float> Collisioner::projectCircle(const Vector2f& center, float
     return {minProj, maxProj};
 }
 
-size_t Collisioner::findClosestPointOnPolygon(const Vector2f& circleCenter, const std::vector<Vector2f>& vertices) {
+size_t Collisioner::findClosestPointOnPolygon(const Vector2f &circleCenter, const std::vector<Vector2f> &vertices) {
     size_t result = 0;
     float minDistance = std::numeric_limits<float>::infinity();
 
     for (size_t i = 0; i < vertices.size(); ++i) {
         const float distance = std::sqrt(std::pow(vertices[i].x - circleCenter.x, 2) +
-                                   std::pow(vertices[i].y - circleCenter.y, 2));
+                                         std::pow(vertices[i].y - circleCenter.y, 2));
 
         if (distance < minDistance) {
             minDistance = distance;

@@ -4,13 +4,13 @@
 
 #include "Physics/Solver.h"
 
-void Solver::ResolveCollision(RigidBody* bodyA, RigidBody* bodyB, const CollisionInfo& collision) {
+void Solver::ResolveCollision(RigidBody *bodyA, RigidBody *bodyB, const CollisionInfo &collision) {
     ApplySeparation(bodyA, bodyB, collision);
 
     ApplyImpulse(bodyA, bodyB, collision);
 }
 
-void Solver::ApplySeparation(RigidBody* bodyA, RigidBody* bodyB, const CollisionInfo& collision) {
+void Solver::ApplySeparation(RigidBody *bodyA, RigidBody *bodyB, const CollisionInfo &collision) {
     const Vector2f separationVector = collision.normal * collision.depth;
 
     if (bodyA->IsInert()) {
@@ -23,8 +23,7 @@ void Solver::ApplySeparation(RigidBody* bodyA, RigidBody* bodyB, const Collision
     }
 }
 
-void Solver::ApplyImpulse(RigidBody* bodyA, RigidBody* bodyB, const CollisionInfo& collision) {
-
+void Solver::ApplyImpulse(RigidBody *bodyA, RigidBody *bodyB, const CollisionInfo &collision) {
     const Vector2f relativeVelocity = bodyA->GetVelocity() - bodyB->GetVelocity();
 
     if (const float velocityAlongNormal = Vector2f::Dot(relativeVelocity, collision.normal); velocityAlongNormal < 0) {

@@ -11,14 +11,19 @@ struct AABB {
 
     AABB(Vector2f min, Vector2f max);
 
-    [[nodiscard]] bool intersect(const AABB& other) const;
-    [[nodiscard]] bool contain(const Vector2f& point) const;
+    [[nodiscard]] bool intersect(const AABB &other) const;
+
+    [[nodiscard]] bool contain(const Vector2f &point) const;
 
     [[nodiscard]] Vector2f getCenter() const;
+
     [[nodiscard]] Vector2f getSize() const;
+
     [[nodiscard]] Vector2f getMin() const;
+
     [[nodiscard]] Vector2f getMax() const;
 
     [[nodiscard]] float getWidth() const;
+
     [[nodiscard]] float getHeight() const;
 };
