@@ -16,7 +16,7 @@ void Particle::ApplyAcceleration(const Vector2f &force) {
     acceleration += force;
 }
 
-void Particle::Update(const float dt) {
+void Particle::update(const float dt) {
     if (inert) {
         velocity *= 0;
         return;

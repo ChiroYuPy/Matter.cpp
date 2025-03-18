@@ -50,7 +50,7 @@ void World::StepWorld(const float dt) {
 
 void World::StepObjects(const float dt) {
     for (RigidBody *body: rigidBodies) {
-        body->Update(dt);
+        body->update(dt);
     }
 }
 
@@ -90,7 +90,7 @@ void World::BroadPhase() {
 
     // Remplir la liste avec les AABB de tous les objets
     for (RigidBody* body : rigidBodies) {
-        AABB aabb = body->GetAABB();
+        AABB aabb = body->getAABB();
         sapList.push_back({aabb.getMin().x, aabb.getMax().x, body});
     }
 
@@ -109,7 +109,7 @@ void World::BroadPhase() {
             // Vérification réelle de la collision avec les AABB
 
             if (bodyA->IsInert() and bodyB->IsInert()) continue;
-            if (!bodyA->GetAABB().intersect(bodyB->GetAABB())) continue;
+            if (!bodyA->getAABB().intersect(bodyB->getAABB())) continue;
 
             collisionPairs.emplace_back(bodyA, bodyB);
         }

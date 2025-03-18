@@ -13,7 +13,7 @@ class Box final : public Polygon {
 public:
     Box(const Vector2f &position, float width, float height, float mass, float friction);
 
-    void Update(float dt) override;
+    void update(float dt) override;
 };
 
 #endif // BOX_H

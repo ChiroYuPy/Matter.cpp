@@ -41,8 +41,8 @@ void Engine::ClampPosition(RigidBody *body) const {
     Vector2 position = body->GetPosition();
     Vector2 velocity = body->getVelocity();
 
-    const float half_width = body->GetAABB().getWidth() / 2;
-    const float half_height = body->GetAABB().getHeight() / 2;
+    const float half_width = body->getAABB().getWidth() / 2;
+    const float half_height = body->getAABB().getHeight() / 2;
 
     const float windowWidth = static_cast<float>(window.getSize().x);
     const float windowHeight = static_cast<float>(window.getSize().y);
@@ -86,7 +86,7 @@ void Engine::Update(const float dt) {
 
 void Engine::HandleMouseClick(const sf::Vector2i &mousePos) {
     for (RigidBody *rb: world.GetRigidBodies()) {
-        if (AABB aabb = rb->GetAABB(); aabb.contain(Vector2(static_cast<float>(mousePos.x),
+        if (AABB aabb = rb->getAABB(); aabb.contain(Vector2(static_cast<float>(mousePos.x),
                                                             static_cast<float>(mousePos.y)))) {
             selectedObject = rb;
             break;
@@ -124,7 +124,7 @@ void Engine::Render() {
 
             window.draw(circle);
         } else if (auto *poly = dynamic_cast<Polygon *>(rb)) {
-            if (const std::vector<Vector2f> &vertices = poly->GetVertices(); !vertices.empty()) {
+            if (const std::vector<Vector2f> &vertices = poly->getVertices(); !vertices.empty()) {
                 sf::ConvexShape convex;
                 convex.setPointCount(vertices.size());
                 for (size_t i = 0; i < vertices.size(); ++i) {

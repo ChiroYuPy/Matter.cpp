@@ -14,8 +14,8 @@ Box::Box(const Vector2f &position, const float width, const float height, const 
     };
 }
 
-void Box::Update(const float dt) {
-    Polygon::Update(dt);
+void Box::update(const float dt) {
+    Polygon::update(dt);
 
     vertices = {
         position + Vector2(-width / 2, -height / 2),

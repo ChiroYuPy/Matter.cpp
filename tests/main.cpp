@@ -1,5 +1,6 @@
 #include <random>
 #include <vector>
+#include <cmath>
 #include "Engine.h"
 #include "Physics/Objects/RigidBody.h"
 #include "Physics/Objects/Ball.h"
@@ -14,62 +15,56 @@ int main() {
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    std::uniform_real_distribution massDist(24.0f, 32.0f);
-    std::uniform_real_distribution xDist(0.0f, static_cast<float>(renderWindow.getSize().x));
-    std::uniform_real_distribution yDist(0.0f, static_cast<float>(renderWindow.getSize().y) / 2);
-    std::bernoulli_distribution inertDist(0.1);
-
     std::vector<RigidBody *> objects;
 
-    // Génération aléatoire d'objets
-    for (int i = 0; i < std::pow(2, 8); ++i) {
-        const float mass = massDist(gen);
-        const float size = mass; // Rayon pour une balle, côté pour un cube
-        const float x = xDist(gen);
-        const float y = yDist(gen);
-        const bool inert = inertDist(gen);
+    const float radius = 8.0f;  // Rayon des balles
+    const float horizontalDistance = 8.0f * radius;  // Distance horizontale entre les balles
+    const float verticalDistance = std::sqrt(8.0f) * radius;  // Distance verticale entre les balles
 
-        RigidBody *obj;
-        obj = new Ball(Vector2(x, y), size, mass, 0.f);
+    // Placer les balles inertes en une grille hexagonale
+    const int numRows = 15;  // Nombre de lignes de balles
+    const int numCols = 15;  // Nombre de colonnes de balles
 
-        obj->SetInert(inert);
-        world.AddRigidBody(obj);
-        objects.push_back(obj);
+    // Position centrale de la grille (au centre de l'écran)
+    const float centerX = static_cast<float>(renderWindow.getSize().x) / 2;
+    const float centerY = static_cast<float>(renderWindow.getSize().y) / 2;
+
+    // Génération des balles pour la grille hexagonale
+    for (int row = 0; row < numRows; ++row) {
+        for (int col = 0; col < numCols; ++col) {
+            // Calculer la position (x, y) pour chaque balle
+            float x = centerX + (static_cast<float>(col) - static_cast<float>(numRows) / 2) * horizontalDistance;
+            float y = centerY + (static_cast<float>(row) - static_cast<float>(numCols) / 2) * verticalDistance;
+
+            // Décalage des lignes paires
+            if (row % 2 == 1) {
+                x += radius * 4;  // Décaler de 'radius' pour les colonnes impaires
+            }
+
+            RigidBody *obj = new Ball(Vector2(x, y), radius, radius, 0.f);  // Création d'une balle
+            world.AddRigidBody(obj);
+            objects.push_back(obj);
+        }
     }
 
-    // Création d'une corde de 11 balles reliées par 10 joints
-    // std::vector<Ball *> ropeBalls;
-    // const Vector2f startPosition(300, 100); // Position de départ de la corde
-    // constexpr float ballRadius = 20.f;
-    // constexpr float jointLength = ballRadius * 2.5f;
-
-    // for (int i = 0; i < 11; ++i) {
-    //     constexpr float ballMass = 5.f;
-    //     auto ball = new Ball(Vector2f(startPosition.x + static_cast<float>(i) * jointLength, startPosition.y),
-    //                          ballRadius, ballMass, 0.f);
-    //     ball->SetInert(false);
-    //     world.AddRigidBody(ball);
-    //     ropeBalls.push_back(ball);
-    // }
-
-    // // Ajout des joints reliant les balles
-    // for (size_t i = 0; i < ropeBalls.size() - 1; ++i) {
-    //     auto join = new Join(*ropeBalls[i], *ropeBalls[i + 1], jointLength, jointLength / 2, 1.f);
-    //     world.AddJoin(join);
-    // }
-
-    // Ajout de plateformes et objets fixes
+    // Ajout du sol et des murs
     const auto ground = new Box(Vector2f(640, 1266), 1280, 32, 12, 0.f);
     ground->SetInert(true);
     world.AddRigidBody(ground);
 
-    // const auto dynamicBox = new Box(Vector2f(640, 640), 128, 128, 10, 0.f);
-    // dynamicBox->SetInert(false);
-    // world.AddRigidBody(dynamicBox);
+    const auto wallLeft = new Box(Vector2f(16, 640), 1216, 32, 12, 0.f);
+    wallLeft->SetInert(true);
+    wallLeft->setAngle(std::numbers::pi * 0.5);
+    world.AddRigidBody(wallLeft);
 
-    // const auto floatingBall = new Ball(Vector2f(600, 500), 64, 10, 0.f);
-    // floatingBall->SetInert(false);
-    // world.AddRigidBody(floatingBall);
+    const auto wallRight = new Box(Vector2f(1266, 640), 1216, 32, 12, 0.f);
+    wallRight->SetInert(true);
+    wallRight->setAngle(std::numbers::pi * 0.5);
+    world.AddRigidBody(wallRight);
+
+    const auto ceilling = new Box(Vector2f(640, 16), 1280, 32, 12, 0.f);
+    ceilling->SetInert(true);
+    world.AddRigidBody(ceilling);
 
     // Lancer le moteur
     engine.Run();
@@ -79,9 +74,6 @@ int main() {
     for (const RigidBody *obj: objects) {
         delete obj;
     }
-    // for (const Ball *ball: ropeBalls) {
-    //     delete ball;
-    // }
 
     return 0;
 }

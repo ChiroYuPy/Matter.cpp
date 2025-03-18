@@ -15,7 +15,7 @@ public:
 
     void ApplyAcceleration(const Vector2f &force);
 
-    virtual void Update(float dt);
+    virtual void update(float dt);
 
     [[nodiscard]] Vector2f GetPosition() const { return position; };
     void SetPosition(const Vector2f newPosition) { position = newPosition; };

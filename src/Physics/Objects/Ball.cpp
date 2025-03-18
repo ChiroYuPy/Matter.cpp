@@ -8,11 +8,11 @@ Ball::Ball(const Vector2f position, const float radius, const float mass, const 
     : RigidBody(position, mass, friction), radius(radius) {
 }
 
-void Ball::Update(const float dt) {
-    RigidBody::Update(dt);
+void Ball::update(const float dt) {
+    RigidBody::update(dt);
 }
 
-AABB Ball::GetAABB() const {
+AABB Ball::getAABB() const {
     const Vector2 min = position - Vector2(radius, radius);
     const Vector2 max = position + Vector2(radius, radius);
     return {min, max};

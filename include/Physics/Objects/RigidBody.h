@@ -12,7 +12,7 @@ class RigidBody : public Particle {
 public:
     RigidBody(Vector2f position, float mass, float friction);
 
-    [[nodiscard]] virtual AABB GetAABB() const = 0;
+    [[nodiscard]] virtual AABB getAABB() const = 0;
 
     [[nodiscard]] virtual BodyType GetType() const = 0;
 
@@ -20,6 +20,11 @@ public:
 
     [[nodiscard]] float getFriction() const;
 
+    void setAngle(float newAngle);
+
+    [[nodiscard]] float getAngle() const;
+
 protected:
     float friction;
+    float angle;
 };

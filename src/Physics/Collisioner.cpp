@@ -16,6 +16,7 @@ CollisionInfo Collisioner::TestCollision(RigidBody *rb1, RigidBody *rb2) {
     } else if (const auto *poly1 = dynamic_cast<Polygon *>(rb1)) {
         if (const auto *ball2 = dynamic_cast<Ball *>(rb2)) {
             collisionInfo = TestBallPolygonCollision(ball2, poly1);
+
         } else if (const auto *poly2 = dynamic_cast<Polygon *>(rb2)) {
             collisionInfo = TestPolygonsCollision(poly1, poly2);
         }
@@ -39,7 +40,7 @@ CollisionInfo Collisioner::TestBallsCollision(const Ball *ball1, const Ball *bal
 }
 
 CollisionInfo Collisioner::TestBallPolygonCollision(const Ball *ball, const Polygon *poly) {
-    const std::vector<Vector2f> &vertices = poly->GetVertices();
+    const std::vector<Vector2f> &vertices = poly->getVertices();
     const Vector2f ballPos = ball->GetPosition();
     const float ballRadius = ball->GetRadius();
 
@@ -94,8 +95,8 @@ CollisionInfo Collisioner::TestBallPolygonCollision(const Ball *ball, const Poly
 
 
 CollisionInfo Collisioner::TestPolygonsCollision(const Polygon *poly1, const Polygon *poly2) {
-    const std::vector<Vector2f> &vertices1 = poly1->GetVertices();
-    const std::vector<Vector2f> &vertices2 = poly2->GetVertices();
+    const std::vector<Vector2f> &vertices1 = poly1->getVertices();
+    const std::vector<Vector2f> &vertices2 = poly2->getVertices();
 
     Vector2f normal(0, 0);
     float depth = std::numeric_limits<float>::infinity();

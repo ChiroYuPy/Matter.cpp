@@ -9,9 +9,9 @@ class Ball final : public RigidBody {
 public:
     Ball(Vector2f position, float radius, float mass, float friction);
 
-    void Update(float dt) override;
+    void update(float dt) override;
 
-    [[nodiscard]] AABB GetAABB() const override;
+    [[nodiscard]] AABB getAABB() const override;
 
     [[nodiscard]] float GetRadius() const;
 
