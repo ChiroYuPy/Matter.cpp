@@ -1,7 +1,20 @@
 #include "Physics/World.h"
 
+#include <algorithm>
+
 #include "Physics/Solver.h"
 #include <vector>
+
+struct SAPEntry {
+    float minX;
+    float maxX;
+    RigidBody* body;
+
+    bool operator<(const SAPEntry& other) const {
+        return minX < other.minX;
+    }
+};
+
 
 World::World(const Vector2f gravity) : gravity(gravity) {
 }
@@ -73,14 +86,29 @@ void World::DetectCollisions() {
 
 void World::BroadPhase() {
     collisionPairs.clear();
+    std::vector<SAPEntry> sapList;
 
-    for (size_t i = 0; i < rigidBodies.size(); ++i) {
-        for (size_t j = i + 1; j < rigidBodies.size(); ++j) {
-            RigidBody *bodyA = rigidBodies[i];
-            RigidBody *bodyB = rigidBodies[j];
+    // Remplir la liste avec les AABB de tous les objets
+    for (RigidBody* body : rigidBodies) {
+        AABB aabb = body->GetAABB();
+        sapList.push_back({aabb.getMin().x, aabb.getMax().x, body});
+    }
+
+    // Trier par minX
+    std::sort(sapList.begin(), sapList.end());
+
+    // Balayage pour détecter les paires en collision
+    for (size_t i = 0; i < sapList.size(); ++i) {
+        for (size_t j = i + 1; j < sapList.size(); ++j) {
+            // Optimisation : si le minX du second dépasse le maxX du premier, on arrête
+            if (sapList[j].minX > sapList[i].maxX) break;
+
+            RigidBody* bodyA = sapList[i].body;
+            RigidBody* bodyB = sapList[j].body;
+
+            // Vérification réelle de la collision avec les AABB
 
             if (bodyA->IsInert() and bodyB->IsInert()) continue;
-
             if (!bodyA->GetAABB().intersect(bodyB->GetAABB())) continue;
 
             collisionPairs.emplace_back(bodyA, bodyB);
