@@ -5,43 +5,41 @@
 #pragma once
 
 #include <cmath>
+#include <iostream>
 
+template <typename T>
 struct Vector2 {
-    float x, y;
+    T x, y;
 
     Vector2();
-
-    Vector2(float x, float y);
+    Vector2(T x, T y);
 
     Vector2 operator+(const Vector2 &other) const;
-
     Vector2 operator-(const Vector2 &other) const;
-
     Vector2 operator-() const;
 
-    Vector2 operator*(float scalar) const;
-
-    Vector2 operator/(float scalar) const;
+    Vector2 operator*(T scalar) const;
+    Vector2 operator/(T scalar) const;
 
     Vector2 &operator+=(const Vector2 &other);
-
     Vector2 &operator-=(const Vector2 &other);
+    Vector2 &operator*=(T scalar);
+    Vector2 &operator/=(T scalar);
 
-    Vector2 &operator*=(float scalar);
-
-    Vector2 &operator/=(float scalar);
-
-    float Magnitude() const;
-
-    Vector2 Normalize() const;
-
-    float Dot(const Vector2 &other) const;
-
-    float Length() const;
-
-    float LengthSquared() const;
-
-    static float Distance(const Vector2 &a, const Vector2 &b);
-
-    static Vector2 Lerp(const Vector2 &a, const Vector2 &b, float t);
+    static T Magnitude(const Vector2 &a);
+    static Vector2 Normalize(const Vector2 &a);
+    static T Dot(const Vector2 &a, const Vector2 &b);
+    static T Length(const Vector2 &a);
+    static T LengthSquared(const Vector2 &a);
+    static T Distance(const Vector2 &a, const Vector2 &b);
+    static Vector2 Lerp(const Vector2 &a, const Vector2 &b, T t);
 };
+
+// Vector2 printing
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const Vector2<T>& v);
+
+// Vector2 aliases
+using Vector2i = Vector2<int>;
+using Vector2f = Vector2<float>;
+using Vector2d = Vector2<double>;

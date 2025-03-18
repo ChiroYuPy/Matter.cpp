@@ -22,7 +22,7 @@ struct CollisionPair {
 
 class World {
 public:
-    explicit World(Vector2 gravity);
+    explicit World(Vector2f gravity);
 
     void AddParticle(Particle *particle);
 
@@ -34,7 +34,7 @@ public:
 
     void Clear();
 
-    void SetGravity(const Vector2 newGravity) { gravity = newGravity; };
+    void SetGravity(const Vector2f newGravity) { gravity = newGravity; };
 
     const std::vector<Particle *> &GetParticles() const { return particles; };
 
@@ -59,7 +59,7 @@ private:
 
     void ResolveCollisions(RigidBody *bodyA, RigidBody *bodyB, const CollisionInfo &collision);
 
-    Vector2 gravity;
+    Vector2f gravity;
     std::vector<CollisionPair> collisionPairs;
 
     std::vector<Particle *> particles;

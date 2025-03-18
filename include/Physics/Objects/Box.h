@@ -7,12 +7,11 @@
 
 #include "Polygon.h"
 
-class Box : public Polygon {
-private:
+class Box final : public Polygon {
     float width, height;
 
 public:
-    Box(const Vector2& position, float width, float height, float mass, float friction);
+    Box(const Vector2f& position, float width, float height, float mass, float friction);
 
     void Update(float dt) override;
 };

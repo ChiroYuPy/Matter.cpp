@@ -10,15 +10,15 @@
 
 class Polygon : public RigidBody {
 protected:
-    std::vector<Vector2> vertices;
+    std::vector<Vector2f> vertices;
 
 public:
-    Polygon(const Vector2& position, float mass, float friction, const std::vector<Vector2>& verts);
+    Polygon(const Vector2f& position, float mass, float friction, const std::vector<Vector2f>& verts);
 
     void Update(float dt) override;
-    AABB GetAABB() const override;
-    const std::vector<Vector2>& GetVertices() const;
-    BodyType GetType() const override { return BodyType::Polygon; }
+    [[nodiscard]] AABB GetAABB() const override;
+    [[nodiscard]] const std::vector<Vector2f>& GetVertices() const;
+    [[nodiscard]] BodyType GetType() const override { return BodyType::Polygon; }
 };
 
 #endif // POLYGON_H

@@ -4,15 +4,15 @@
 
 #include "Physics/Objects/Particle.h"
 
-Particle::Particle(Vector2 position, float mass)
+Particle::Particle(const Vector2f position, const float mass)
     : position(position), velocity(0, 0), acceleration(0, 0), mass(mass), active(true), inert(false) {
 }
 
-void Particle::ApplyForce(const Vector2 &force) {
+void Particle::ApplyForce(const Vector2f &force) {
     acceleration += force / mass;
 }
 
-void Particle::ApplyAcceleration(const Vector2 &force) {
+void Particle::ApplyAcceleration(const Vector2f &force) {
     acceleration += force;
 }
 
@@ -24,5 +24,5 @@ void Particle::Update(float dt) {
 
     velocity += acceleration * dt;
     position += velocity * dt;
-    acceleration = Vector2(0, 0);
+    acceleration = Vector2f(0, 0);
 }

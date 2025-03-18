@@ -16,7 +16,7 @@ int main() {
 
     std::uniform_real_distribution massDist(8.0f, 16.0f);
     std::uniform_real_distribution xDist(0.0f, static_cast<float>(renderWindow.getSize().x));
-    std::uniform_real_distribution yDist(0.0f, static_cast<float>(renderWindow.getSize().y / 2));
+    std::uniform_real_distribution yDist(0.0f, static_cast<float>(renderWindow.getSize().y) / 2);
     std::bernoulli_distribution inertDist(0.25);
     std::bernoulli_distribution shapeDist(0.5); // 50% chance d'être une balle ou un cube
 
@@ -24,11 +24,11 @@ int main() {
 
     // Génération aléatoire d'objets (balles ou cubes)
     for (int i = 0; i < 128; ++i) {
-        float mass = massDist(gen);
-        float size = mass * 2; // Rayon pour une balle, côté pour un cube
-        float x = xDist(gen);
-        float y = yDist(gen);
-        bool inert = inertDist(gen);
+        const float mass = massDist(gen);
+        const float size = mass * 2; // Rayon pour une balle, côté pour un cube
+        const float x = xDist(gen);
+        const float y = yDist(gen);
+        const bool inert = inertDist(gen);
 
         RigidBody *obj;
         if (shapeDist(gen)) {
@@ -46,13 +46,13 @@ int main() {
 
     // Création d'une corde de 11 balles reliées par 10 joints
     std::vector<Ball *> ropeBalls;
-    Vector2 startPosition(300, 100); // Position de départ de la corde
-    float ballRadius = 20.f;
-    float ballMass = 5.f;
-    float jointLength = ballRadius * 2.5f;
+    const Vector2f startPosition(300, 100); // Position de départ de la corde
+    constexpr float ballRadius = 20.f;
+    constexpr float jointLength = ballRadius * 2.5f;
 
     for (int i = 0; i < 11; ++i) {
-        Ball *ball = new Ball(Vector2(startPosition.x + i * jointLength, startPosition.y), ballRadius, ballMass, 0.f);
+        constexpr float ballMass = 5.f;
+        auto ball = new Ball(Vector2f(startPosition.x + static_cast<float>(i) * jointLength, startPosition.y), ballRadius, ballMass, 0.f);
         ball->SetInert(false);
         world.AddRigidBody(ball);
         ropeBalls.push_back(ball);
@@ -60,20 +60,20 @@ int main() {
 
     // Ajout des joints reliant les balles
     for (size_t i = 0; i < ropeBalls.size() - 1; ++i) {
-        Join *join = new Join(*ropeBalls[i], *ropeBalls[i + 1], jointLength, jointLength / 2, 1.f);
+        auto join = new Join(*ropeBalls[i], *ropeBalls[i + 1], jointLength, jointLength / 2, 1.f);
         world.AddJoin(join);
     }
 
     // Ajout de plateformes et objets fixes
-    Box* ground = new Box(Vector2(640, 1266), 1280, 32, 12, 0.f);
+    const auto ground = new Box(Vector2f(640, 1266), 1280, 32, 12, 0.f);
     ground->SetInert(true);
     world.AddRigidBody(ground);
 
-    Box* dynamicBox = new Box(Vector2(640, 640), 128, 128, 10, 0.f);
+    const auto dynamicBox = new Box(Vector2f(640, 640), 128, 128, 10, 0.f);
     dynamicBox->SetInert(false);
     world.AddRigidBody(dynamicBox);
 
-    Ball* floatingBall = new Ball(Vector2(600, 500), 64, 10, 0.f);
+    const auto floatingBall = new Ball(Vector2f(600, 500), 64, 10, 0.f);
     floatingBall->SetInert(false);
     world.AddRigidBody(floatingBall);
 
@@ -82,10 +82,10 @@ int main() {
     world.Clear();
 
     // Nettoyage mémoire
-    for (RigidBody *obj : objects) {
+    for (const RigidBody *obj : objects) {
         delete obj;
     }
-    for (Ball *ball : ropeBalls) {
+    for (const Ball *ball : ropeBalls) {
         delete ball;
     }
 

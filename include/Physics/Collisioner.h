@@ -9,7 +9,7 @@
 
 struct CollisionInfo {
     bool collided{};
-    Vector2 normal;
+    Vector2f normal;
     float depth{};
 };
 
@@ -24,9 +24,9 @@ private:
 
     static CollisionInfo TestPolygonsCollision(const Polygon *poly1, const Polygon *poly2);
 
-    static std::pair<float, float> projectVertices(const std::vector<Vector2> &vertices, const Vector2 &axis);
+    static std::pair<float, float> projectVertices(const std::vector<Vector2f> &vertices, const Vector2f &axis);
 
-    static std::pair<float, float> projectCircle(const Vector2 &center, float radius, const Vector2 &axis);
+    static std::pair<float, float> projectCircle(const Vector2f &center, float radius, const Vector2f &axis);
 
-    static size_t findClosestPointOnPolygon(const Vector2 &circleCenter, const std::vector<Vector2> &vertices);
+    static size_t findClosestPointOnPolygon(const Vector2f &circleCenter, const std::vector<Vector2f> &vertices);
 };

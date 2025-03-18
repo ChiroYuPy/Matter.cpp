@@ -23,7 +23,7 @@ private:
 
     void ProcessEvents();
 
-    void ClampPosition(RigidBody *body);
+    void ClampPosition(RigidBody *body) const;
 
     void Update(float dt);
 

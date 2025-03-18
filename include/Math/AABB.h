@@ -6,19 +6,19 @@
 #include "Vector2.h"
 
 struct AABB {
-    Vector2 min;
-    Vector2 max;
+    Vector2f min;
+    Vector2f max;
 
-    AABB(Vector2 min, Vector2 max);
+    AABB(Vector2f min, Vector2f max);
 
-    bool Intersect(const AABB& other) const;
-    bool Contain(const Vector2& point) const;
+    [[nodiscard]] bool intersect(const AABB& other) const;
+    [[nodiscard]] bool contain(const Vector2f& point) const;
 
-    Vector2 GetCenter() const;
-    Vector2 GetSize() const;
-    Vector2 GetMin() const;
-    Vector2 GetMax() const;
+    [[nodiscard]] Vector2f getCenter() const;
+    [[nodiscard]] Vector2f getSize() const;
+    [[nodiscard]] Vector2f getMin() const;
+    [[nodiscard]] Vector2f getMax() const;
 
-    float GetWidth() const;
-    float GetHeight() const;
+    [[nodiscard]] float getWidth() const;
+    [[nodiscard]] float getHeight() const;
 };

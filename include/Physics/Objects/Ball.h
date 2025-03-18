@@ -5,14 +5,14 @@
 #pragma once
 #include "RigidBody.h"
 
-class Ball : public RigidBody {
+class Ball final : public RigidBody {
 public:
-    Ball(Vector2 position, float radius, float mass, float friction);
+    Ball(Vector2f position, float radius, float mass, float friction);
 
     void Update(float dt) override;
-    AABB GetAABB() const override;
-    float GetRadius() const;
-    BodyType GetType() const override { return BodyType::Ball; }
+    [[nodiscard]] AABB GetAABB() const override;
+    [[nodiscard]] float GetRadius() const;
+    [[nodiscard]] BodyType GetType() const override { return BodyType::Ball; }
 
 private:
     float radius;

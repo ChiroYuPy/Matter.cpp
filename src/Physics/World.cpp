@@ -6,7 +6,7 @@
 #include "Physics/Solver.h"
 #include <vector>
 
-World::World(Vector2 gravity) : gravity(gravity) {
+World::World(Vector2f gravity) : gravity(gravity) {
 }
 
 void World::AddParticle(Particle *particle) {
@@ -77,7 +77,7 @@ void World::BroadPhase() {
 
             if (bodyA->IsInert() and bodyB->IsInert()) continue;
 
-            if (!bodyA->GetAABB().Intersect(bodyB->GetAABB())) continue;
+            if (!bodyA->GetAABB().intersect(bodyB->GetAABB())) continue;
 
             collisionPairs.emplace_back(bodyA, bodyB);
         }

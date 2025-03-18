@@ -4,7 +4,7 @@
 
 #include "Physics/Objects/Box.h"
 
-Box::Box(const Vector2& position, float width, float height, float mass, float friction)
+Box::Box(const Vector2f& position, const float width, const float height, const float mass, const float friction)
     : Polygon(position, mass, friction, {}), width(width), height(height) {
 
     vertices = {
@@ -15,7 +15,7 @@ Box::Box(const Vector2& position, float width, float height, float mass, float f
     };
 }
 
-void Box::Update(float dt) {
+void Box::Update(const float dt) {
     Polygon::Update(dt);
 
     vertices = {

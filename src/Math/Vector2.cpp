@@ -4,51 +4,60 @@
 
 #include "Math/Vector2.h"
 
-Vector2::Vector2() : x(0), y(0) {
-}
+template <typename T>
+Vector2<T>::Vector2() : x(0), y(0) {}
 
-Vector2::Vector2(float x, float y) : x(x), y(y) {
-}
+template <typename T>
+Vector2<T>::Vector2(T x, T y) : x(x), y(y) {}
 
-Vector2 Vector2::operator+(const Vector2 &other) const {
+template <typename T>
+Vector2<T> Vector2<T>::operator+(const Vector2 &other) const {
     return Vector2(x + other.x, y + other.y);
 }
 
-Vector2 Vector2::operator-(const Vector2 &other) const {
+template <typename T>
+Vector2<T> Vector2<T>::operator-(const Vector2 &other) const {
     return Vector2(x - other.x, y - other.y);
 }
 
-Vector2 Vector2::operator-() const {
+template <typename T>
+Vector2<T> Vector2<T>::operator-() const {
     return Vector2(-x, -y);
 }
 
-Vector2 Vector2::operator*(float scalar) const {
+template <typename T>
+Vector2<T> Vector2<T>::operator*(T scalar) const {
     return Vector2(x * scalar, y * scalar);
 }
 
-Vector2 Vector2::operator/(float scalar) const {
-    return (scalar != 0) ? Vector2(x / scalar, y / scalar) : Vector2(0, 0);
+template <typename T>
+Vector2<T> Vector2<T>::operator/(const T scalar) const {
+    return (scalar != 0) ? Vector2(x / scalar, y / scalar) : Vector2();
 }
 
-Vector2 &Vector2::operator+=(const Vector2 &other) {
+template <typename T>
+Vector2<T>& Vector2<T>::operator+=(const Vector2 &other) {
     x += other.x;
     y += other.y;
     return *this;
 }
 
-Vector2 &Vector2::operator-=(const Vector2 &other) {
+template <typename T>
+Vector2<T>& Vector2<T>::operator-=(const Vector2 &other) {
     x -= other.x;
     y -= other.y;
     return *this;
 }
 
-Vector2 &Vector2::operator*=(float scalar) {
+template <typename T>
+Vector2<T>& Vector2<T>::operator*=(const T scalar) {
     x *= scalar;
     y *= scalar;
     return *this;
 }
 
-Vector2 &Vector2::operator/=(float scalar) {
+template <typename T>
+Vector2<T>& Vector2<T>::operator/=(const T scalar) {
     if (scalar != 0) {
         x /= scalar;
         y /= scalar;
@@ -56,31 +65,48 @@ Vector2 &Vector2::operator/=(float scalar) {
     return *this;
 }
 
-float Vector2::Magnitude() const {
-    return std::sqrt(x * x + y * y);
+template <typename T>
+T Vector2<T>::Magnitude(const Vector2 &a) {
+    return std::sqrt(a.x * a.x + a.y * a.y);
 }
 
-float Vector2::Length() const {
-    return Magnitude();
+template <typename T>
+T Vector2<T>::Length(const Vector2 &a) {
+    return Magnitude(a);
 }
 
-float Vector2::LengthSquared() const {
-    return x * x + y * y;
+template <typename T>
+T Vector2<T>::LengthSquared(const Vector2 &a) {
+    return a.x * a.x + a.y * a.y;
 }
 
-Vector2 Vector2::Normalize() const {
-    float mag = Magnitude();
-    return (mag != 0) ? (*this / mag) : Vector2(0, 0);
+template <typename T>
+Vector2<T> Vector2<T>::Normalize(const Vector2 &a) {
+    const float mag = Magnitude(a);
+    return (mag != 0) ? (a / mag) : Vector2(0, 0);
 }
 
-float Vector2::Dot(const Vector2 &other) const {
-    return x * other.x + y * other.y;
+template <typename T>
+T Vector2<T>::Dot(const Vector2 &a, const Vector2 &b) {
+    return a.x * b.x + a.y * b.y;
 }
 
-float Vector2::Distance(const Vector2 &a, const Vector2 &b) {
-    return (b - a).Magnitude();
+template <typename T>
+T Vector2<T>::Distance(const Vector2 &a, const Vector2 &b) {
+    return Magnitude(b - a);
 }
 
-Vector2 Vector2::Lerp(const Vector2 &a, const Vector2 &b, float t) {
+template <typename T>
+Vector2<T> Vector2<T>::Lerp(const Vector2 &a, const Vector2 &b, const T t) {
     return a + (b - a) * t;
 }
+
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const Vector2<T>& v) {
+    os << "Vector2(" << v.x << ", " << v.y << ")";
+    return os;
+}
+
+template class Vector2<int>;
+template class Vector2<float>;
+template class Vector2<double>;

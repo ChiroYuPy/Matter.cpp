@@ -4,17 +4,17 @@
 
 #include "Physics/Objects/Ball.h"
 
-Ball::Ball(Vector2 position, float radius, float mass, float friction)
+Ball::Ball(const Vector2f position, const float radius, const float mass, const float friction)
     : RigidBody(position, mass, friction), radius(radius) {}
 
-void Ball::Update(float dt) {
+void Ball::Update(const float dt) {
     RigidBody::Update(dt);
 }
 
 AABB Ball::GetAABB() const {
-    Vector2 min = position - Vector2(radius, radius);
-    Vector2 max = position + Vector2(radius, radius);
-    return AABB(min, max);
+    const Vector2 min = position - Vector2(radius, radius);
+    const Vector2 max = position + Vector2(radius, radius);
+    return {min, max};
 }
 
 float Ball::GetRadius() const {

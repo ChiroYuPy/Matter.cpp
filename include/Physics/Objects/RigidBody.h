@@ -10,7 +10,7 @@ enum class BodyType { Ball, Polygon };
 
 class RigidBody : public Particle {
 public:
-    RigidBody(Vector2 position, float mass, float friction);
+    RigidBody(Vector2f position, float mass, float friction);
 
     virtual void Update(float dt) override;
     virtual AABB GetAABB() const = 0;
