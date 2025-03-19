@@ -18,6 +18,10 @@ AABB Ball::getAABB() const {
     return {min, max};
 }
 
-float Ball::GetRadius() const {
+float Ball::getRadius() const {
     return radius;
+}
+
+[[nodiscard]] BodyType Ball::getType() const override {
+    return BodyType::Ball;
 }

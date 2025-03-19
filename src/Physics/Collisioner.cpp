@@ -27,7 +27,7 @@ CollisionInfo Collisioner::TestCollision(RigidBody *rb1, RigidBody *rb2) {
 CollisionInfo Collisioner::TestBallsCollision(const Ball *ball1, const Ball *ball2) {
     const Vector2 distance = ball1->getPosition() - ball2->getPosition();
 
-    if (const float radiusSum = ball1->GetRadius() + ball2->GetRadius(); Vector2f::Length(distance) <= radiusSum) {
+    if (const float radiusSum = ball1->getRadius() + ball2->getRadius(); Vector2f::Length(distance) <= radiusSum) {
         const Vector2 normal = distance / Vector2f::Length(distance);
 
         const float depth = radiusSum - Vector2f::Length(distance);
@@ -41,7 +41,7 @@ CollisionInfo Collisioner::TestBallsCollision(const Ball *ball1, const Ball *bal
 CollisionInfo Collisioner::TestBallPolygonCollision(const Ball *ball, const Polygon *poly) {
     const std::vector<Vector2f> &vertices = poly->getVertices();
     const Vector2f ballPos = ball->getPosition();
-    const float ballRadius = ball->GetRadius();
+    const float ballRadius = ball->getRadius();
 
     Vector2f normal(0, 0);
     float depth = std::numeric_limits<float>::infinity();

@@ -17,20 +17,20 @@ public:
 
     virtual void update(float dt);
 
-    [[nodiscard]] Vector2f getPosition() const { return position; };
-    void setPosition(const Vector2f newPosition) { position = newPosition; };
+    [[nodiscard]] Vector2f getPosition() const;
+    void setPosition(Vector2f newPosition);
 
-    [[nodiscard]] Vector2f getVelocity() const { return velocity; };
-    void setVelocity(const Vector2f newPosition);;
+    [[nodiscard]] Vector2f getVelocity() const;
+    void setVelocity(Vector2f newPosition);
     
-    [[nodiscard]] bool isInert() const { return inert; };
-    void setInert(const bool newInert) { inert = newInert; };
+    [[nodiscard]] bool isInert() const;
+    void setInert(bool newInert);
 
-    [[nodiscard]] bool isActive() const { return active; };
-    void setActive(const bool newActive) { active = newActive; };
+    [[nodiscard]] bool isActive() const;
+    void setActive(bool newActive);
 
-    [[nodiscard]] float getMass() const { return mass; };
-    void setMass(const float newMass) { mass = newMass; };
+    [[nodiscard]] float getMass() const;
+    void setMass(float newMass);
 
 protected:
     Vector2f position;

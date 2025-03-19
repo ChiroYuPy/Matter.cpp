@@ -13,9 +13,9 @@ public:
 
     [[nodiscard]] AABB getAABB() const override;
 
-    [[nodiscard]] float GetRadius() const;
+    [[nodiscard]] float getRadius() const;
 
-    [[nodiscard]] BodyType GetType() const override { return BodyType::Ball; }
+    [[nodiscard]] BodyType getType() const override;
 
 private:
     float radius;

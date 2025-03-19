@@ -22,7 +22,7 @@ public:
 
     [[nodiscard]] std::vector<Vector2f> getVertices() const;
 
-    [[nodiscard]] BodyType GetType() const override { return BodyType::Polygon; }
+    [[nodiscard]] BodyType getType() const override { return BodyType::Polygon; }
 };
 
 #endif // POLYGON_H

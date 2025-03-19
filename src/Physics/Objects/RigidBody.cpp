@@ -4,7 +4,7 @@ RigidBody::RigidBody(const Vector2f position, const float mass, const float fric
     : Particle(position, mass), friction(friction), angle(0) {
 }
 
-void RigidBody::SetFriction(const float newFriction) {
+void RigidBody::setFriction(const float newFriction) {
     friction = newFriction;
 }
 

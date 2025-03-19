@@ -26,9 +26,9 @@ void Renderer::render(sf::RenderWindow &renderWindow, World &world) {
     for (RigidBody *rb : world.GetRigidBodies()) {
         constexpr float maxSpeed = 500.0f;
         if (auto *ball = dynamic_cast<Ball *>(rb)) {
-            sf::CircleShape circle(ball->GetRadius());
-            circle.setPosition(ball->getPosition().x - ball->GetRadius(),
-                               ball->getPosition().y - ball->GetRadius());
+            sf::CircleShape circle(ball->getRadius());
+            circle.setPosition(ball->getPosition().x - ball->getRadius(),
+                               ball->getPosition().y - ball->getRadius());
 
             float speed = Vector2f::Length(ball->getVelocity());
             drawShape(renderWindow, circle, calculateColor(speed, maxSpeed, ball->isInert()));

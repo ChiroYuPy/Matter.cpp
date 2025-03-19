@@ -14,9 +14,9 @@ public:
 
     [[nodiscard]] virtual AABB getAABB() const = 0;
 
-    [[nodiscard]] virtual BodyType GetType() const = 0;
+    [[nodiscard]] virtual BodyType getType() const = 0;
 
-    void SetFriction(float newFriction);
+    void setFriction(float newFriction);
 
     [[nodiscard]] float getFriction() const;
 

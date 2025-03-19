@@ -83,12 +83,6 @@ T Vector2<T>::LengthSquared(const Vector2 &a) {
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::Normalize(const Vector2 &a) {
-    const float mag = Magnitude(a);
-    return (mag != 0) ? (a / mag) : Vector2(0, 0);
-}
-
-template<typename T>
 T Vector2<T>::Dot(const Vector2 &a, const Vector2 &b) {
     return a.x * b.x + a.y * b.y;
 }
@@ -96,6 +90,12 @@ T Vector2<T>::Dot(const Vector2 &a, const Vector2 &b) {
 template<typename T>
 T Vector2<T>::Distance(const Vector2 &a, const Vector2 &b) {
     return Magnitude(b - a);
+}
+
+template<typename T>
+Vector2<T> Vector2<T>::Normalize(const Vector2 &a) {
+    const float mag = Magnitude(a);
+    return (mag != 0) ? (a / mag) : Vector2(0, 0);
 }
 
 template<typename T>
