@@ -16,22 +16,25 @@ constexpr int NUM_OBJECTS = 256;
 void createWindowBox(World &world) {
     std::vector<std::unique_ptr<Box>> walls;
 
+    // Création des murs à l'intérieur de la fonction
     walls.emplace_back(std::make_unique<Box>(Vector2f(WINDOW_SIZE / 2, WINDOW_SIZE - 14), WINDOW_SIZE, WALL_THICKNESS, 12, 0.f));
     walls.emplace_back(std::make_unique<Box>(Vector2f(16, WINDOW_SIZE / 2), WALL_THICKNESS, WINDOW_SIZE - 64, 12, 0.f));
     walls.emplace_back(std::make_unique<Box>(Vector2f(WINDOW_SIZE - 16, WINDOW_SIZE / 2), WALL_THICKNESS, WINDOW_SIZE - 64, 12, 0.f));
     walls.emplace_back(std::make_unique<Box>(Vector2f(WINDOW_SIZE / 2, 16), WINDOW_SIZE, WALL_THICKNESS, 12, 0.f));
 
+    // Ajout des murs au monde
     for (auto &wall : walls) {
         wall->setInert(true);
-        world.AddRigidBody(wall.release());
+        world.addRigidBody(wall.release());
     }
 }
 
 void createSlopeBox(World &world, int numSlopes) {
+    // Création et ajout des pentes à l'intérieur de la fonction
     for (int i = 0; i < numSlopes; ++i) {
         auto slope = std::make_unique<Box>(Vector2f(WINDOW_SIZE / 2, 12), WINDOW_SIZE, WALL_THICKNESS, 12, 0.f);
         slope->setInert(true);
-        world.AddRigidBody(slope.release());
+        world.addRigidBody(slope.release());
     }
 }
 
@@ -44,8 +47,10 @@ void createAppObjects(World &world, const sf::RenderWindow &renderWindow) {
     std::uniform_real_distribution<float> yDist(64.f, static_cast<float>(renderWindow.getSize().y) / 2 - 64.f);
     std::bernoulli_distribution inertDist(0.1);
 
+    // Appel à la fonction pour créer les murs
     createWindowBox(world);
 
+    // Création des objets Ball à l'intérieur de la fonction
     for (int i = 0; i < NUM_OBJECTS; ++i) {
         float size = sizeDist(gen);
         float mass = size * OBJECT_MASS_FACTOR;
@@ -55,17 +60,16 @@ void createAppObjects(World &world, const sf::RenderWindow &renderWindow) {
 
         auto obj = std::make_unique<Ball>(Vector2(x, y), size, mass, 0.f);
         obj->setInert(isInert);
-        world.AddRigidBody(obj.release());
+        world.addRigidBody(obj.release());
     }
 }
 
 RigidBody *selectedObject = nullptr;
-World world;
-sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE, WINDOW_SIZE), "Physics Engine");
 
-void HandleMouseClick(const sf::Vector2i &mousePos) {
-    Vector2 mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+void HandleMouseClick(const sf::Vector2i &mousePos, World& world) {
+    const Vector2 mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
 
+    // Recherche de l'objet sélectionné
     for (RigidBody *rb : world.GetRigidBodies()) {
         if (rb->getAABB().contain(mousePosF)) {
             selectedObject = rb;
@@ -78,15 +82,15 @@ void HandleMouseRelease() {
     selectedObject = nullptr;
 }
 
-void handleEvent() {
+void handleEvent(sf::RenderWindow& renderWindow, World& world) {
     sf::Event event{};
-    while (window.pollEvent(event)) {
+    while (renderWindow.pollEvent(event)) {
         switch (event.type) {
             case sf::Event::Closed:
-                window.close();
+                renderWindow.close();
                 break;
             case sf::Event::MouseButtonPressed:
-                HandleMouseClick(sf::Mouse::getPosition(window));
+                HandleMouseClick(sf::Mouse::getPosition(renderWindow), world);
                 break;
             case sf::Event::MouseButtonReleased:
                 HandleMouseRelease();
@@ -97,31 +101,37 @@ void handleEvent() {
     }
 }
 
-void update(const float dt) {
-    world.Update(dt);
+void update(const float dt, sf::RenderWindow& renderWindow, World& world) {
+    world.update(dt);
 
     if (selectedObject) {
-        const sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        const sf::Vector2i mousePos = sf::Mouse::getPosition(renderWindow);
         selectedObject->setPosition(Vector2(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)));
         selectedObject->setVelocity(Vector2f(0, 0));
     }
 }
 
-void render() {
-    window.clear();
-    Renderer::render(window, world);
-    window.display();
+void render(sf::RenderWindow& renderWindow, World& world) {
+    renderWindow.clear();
+    Renderer::render(renderWindow, world);
+    renderWindow.display();
 }
 
 int main() {
+    World world;
+    world.setGravity({0, 9.81f});
+    sf::RenderWindow renderWindow(sf::VideoMode(WINDOW_SIZE, WINDOW_SIZE), "Physics Engine");
     sf::Clock clock;
-    createAppObjects(world, window);
 
-    while (window.isOpen()) {
+    renderWindow.setFramerateLimit(120);
+    createAppObjects(world, renderWindow);
+
+    while (renderWindow.isOpen()) {
         const float dt = clock.restart().asSeconds();
-        handleEvent();
-        update(dt);
-        render();
+        std::cout << 1/dt << std::endl;
+        handleEvent(renderWindow, world);
+        update(dt, renderWindow, world);
+        render(renderWindow, world);
     }
 
     world.Clear();

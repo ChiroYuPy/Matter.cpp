@@ -19,21 +19,19 @@ struct CollisionPair {
 
 class World {
 public:
-    World();
+    World() = default;
 
-    explicit World(Vector2f gravity);
+    void addParticle(Particle *particle);
 
-    void AddParticle(Particle *particle);
+    void addRigidBody(RigidBody *body);
 
-    void AddRigidBody(RigidBody *body);
+    void addJoin(Join *join);
 
-    void AddJoin(Join *join);
-
-    void Update(float dt);
+    void update(float dt);
 
     void Clear();
 
-    void SetGravity(const Vector2f newGravity) { gravity = newGravity; };
+    void setGravity(const Vector2f newGravity) { gravity = newGravity; };
 
     [[nodiscard]] const std::vector<Particle *> &GetParticles() const { return particles; };
 
@@ -42,19 +40,19 @@ public:
     [[nodiscard]] const std::vector<Join *> &GetJoins() const { return joins; };
 
 private:
-    void StepWorld(float dt);
+    void stepWorld(float dt);
 
-    void StepObjects(float dt);
+    void stepObjects(float dt);
 
-    void StepJoins(float dt) const;
+    void stepJoins(float dt) const;
 
-    void ApplyGravity() const;
+    void applyGravity() const;
 
-    void ApplyAirFriction() const;
+    void applyAirFriction() const;
 
-    void DetectCollisions();
+    void detectCollisions();
 
-    void BroadPhase();
+    void broadPhase();
 
     void NarrowPhase();
 

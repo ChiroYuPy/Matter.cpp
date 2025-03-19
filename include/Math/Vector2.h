@@ -48,10 +48,6 @@ struct Vector2 {
     static Vector2 Lerp(const Vector2 &a, const Vector2 &b, T t);
 };
 
-// Vector2 printing
-template<typename T>
-std::ostream &operator<<(std::ostream &os, const Vector2<T> &v);
-
 // Vector2 aliases
 using Vector2i = Vector2<int>;
 using Vector2f = Vector2<float>;

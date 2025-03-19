@@ -15,52 +15,48 @@ struct SAPEntry {
     }
 };
 
-
-World::World(const Vector2f gravity) : gravity(gravity) {
-}
-
-void World::AddParticle(Particle *particle) {
+void World::addParticle(Particle *particle) {
     particles.push_back(particle);
 }
 
-void World::AddRigidBody(RigidBody *body) {
+void World::addRigidBody(RigidBody *body) {
     rigidBodies.push_back(body);
 }
 
-void World::AddJoin(Join *join) {
+void World::addJoin(Join *join) {
     joins.push_back(join);
 }
 
-void World::Update(const float dt) {
-    StepWorld(dt);
+void World::update(const float dt) {
+    stepWorld(dt);
 }
 
-void World::StepWorld(const float dt) {
+void World::stepWorld(const float dt) {
     // natural physics modifications
-    ApplyGravity();
-    ApplyAirFriction();
+    applyGravity();
+    applyAirFriction();
 
     // objects update
-    StepJoins(dt);
-    StepObjects(dt);
+    stepJoins(dt);
+    stepObjects(dt);
 
     // collision detection
-    DetectCollisions();
+    detectCollisions();
 }
 
-void World::StepObjects(const float dt) {
+void World::stepObjects(const float dt) {
     for (RigidBody *body: rigidBodies) {
         body->update(dt);
     }
 }
 
-void World::StepJoins(const float dt) const {
+void World::stepJoins(const float dt) const {
     for (const Join *join: joins) {
         join->update(dt);
     }
 }
 
-void World::ApplyGravity() const {
+void World::applyGravity() const {
     for (RigidBody *body: rigidBodies) {
         if (!body->isInert()) {
             body->applyAcceleration(gravity);
@@ -68,7 +64,7 @@ void World::ApplyGravity() const {
     }
 }
 
-void World::ApplyAirFriction() const {
+void World::applyAirFriction() const {
     for (RigidBody *body: rigidBodies) {
         if (!body->isInert()) {
             body->setVelocity(body->getVelocity() * (1.0f - body->getFriction()));
@@ -76,15 +72,16 @@ void World::ApplyAirFriction() const {
     }
 }
 
-void World::DetectCollisions() {
+void World::detectCollisions() {
     // preliminary detection
-    BroadPhase();
+    broadPhase();
 
     // advanced detection
     NarrowPhase();
 }
 
-void World::BroadPhase() {
+void World::broadPhase() {
+    // Sweep and Prune
     collisionPairs.clear();
     std::vector<SAPEntry> sapList;
 

@@ -38,28 +38,28 @@ Vector2<T> Vector2<T>::operator/(const T scalar) const {
 }
 
 template<typename T>
-Vector2<T> &Vector2<T>::operator+=(const Vector2 &other) {
+Vector2<T>& Vector2<T>::operator+=(const Vector2 &other) {
     x += other.x;
     y += other.y;
     return *this;
 }
 
 template<typename T>
-Vector2<T> &Vector2<T>::operator-=(const Vector2 &other) {
+Vector2<T>& Vector2<T>::operator-=(const Vector2 &other) {
     x -= other.x;
     y -= other.y;
     return *this;
 }
 
 template<typename T>
-Vector2<T> &Vector2<T>::operator*=(const T scalar) {
+Vector2<T>& Vector2<T>::operator*=(const T scalar) {
     x *= scalar;
     y *= scalar;
     return *this;
 }
 
 template<typename T>
-Vector2<T> &Vector2<T>::operator/=(const T scalar) {
+Vector2<T>& Vector2<T>::operator/=(const T scalar) {
     if (scalar != 0) {
         x /= scalar;
         y /= scalar;
@@ -101,12 +101,6 @@ T Vector2<T>::Distance(const Vector2 &a, const Vector2 &b) {
 template<typename T>
 Vector2<T> Vector2<T>::Lerp(const Vector2 &a, const Vector2 &b, const T t) {
     return a + (b - a) * t;
-}
-
-template<typename T>
-std::ostream &operator<<(std::ostream &os, const Vector2<T> &v) {
-    os << "Vector2(" << v.x << ", " << v.y << ")";
-    return os;
 }
 
 template class Vector2<int>;
