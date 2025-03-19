@@ -28,20 +28,30 @@ void World::addJoin(Join *join) {
 }
 
 void World::update(const float dt) {
-    stepWorld(dt);
-}
+    static float accumulatedTime = 0.0f;
+    accumulatedTime += dt;
 
-void World::stepWorld(const float dt) {
-    // natural physics modifications
-    applyGravity();
-    applyAirFriction();
+    int updatesThisFrame = 0;
 
-    // objects update
-    stepJoins(dt);
-    stepObjects(dt);
+    const float dividedDeltaTime = 1.f / updatePerSeconds;
 
-    // collision detection
-    detectCollisions();
+    while (accumulatedTime >= dividedDeltaTime && updatesThisFrame < maxUpdatePerFrame) {
+        std::cout << dividedDeltaTime << std::endl;
+
+        // Modifications physiques naturelles
+        applyGravity();
+        applyAirFriction();
+
+        // Mise à jour des objets et des jointures
+        stepJoins(dividedDeltaTime);
+        stepObjects(dividedDeltaTime);
+
+        // Détection des collisions
+        detectCollisions();
+
+        accumulatedTime -= dividedDeltaTime;
+        updatesThisFrame++;
+    }
 }
 
 void World::stepObjects(const float dt) {
@@ -139,3 +149,15 @@ void World::clear() {
 
     collisionPairs.clear();
 }
+
+void World::setUpdatePerSeconds(const int newUpdatePerSeconds) { updatePerSeconds = newUpdatePerSeconds; }
+
+void World::setMaxUpdatePerFrame(const int newMaxUpdatePerFrame) { maxUpdatePerFrame = newMaxUpdatePerFrame; }
+
+void World::setGravity(const Vector2f newGravity) { gravity = newGravity; }
+
+[[nodiscard]] const std::vector<Particle *>& World::GetParticles() const { return particles; }
+
+[[nodiscard]] const std::vector<RigidBody *>& World::GetRigidBodies() const { return rigidBodies; }
+
+[[nodiscard]] const std::vector<Join *>& World::GetJoins() const { return joins; }

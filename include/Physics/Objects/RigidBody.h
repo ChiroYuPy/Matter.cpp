@@ -10,11 +10,15 @@ enum class BodyType { Ball, Polygon };
 
 class RigidBody : public Particle {
 public:
-    RigidBody(Vector2f position, float mass, float friction);
+    RigidBody(Vector2f position);
 
     [[nodiscard]] virtual AABB getAABB() const = 0;
 
     [[nodiscard]] virtual BodyType getType() const = 0;
+
+    void setRestitution(float newRestitution);
+
+    [[nodiscard]] float getRestitution() const;
 
     void setFriction(float newFriction);
 
@@ -25,6 +29,7 @@ public:
     [[nodiscard]] float getAngle() const;
 
 protected:
+    float restitution;
     float friction;
     float angle;
 };

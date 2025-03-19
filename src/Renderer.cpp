@@ -2,9 +2,7 @@
 
 // Fonction pour calculer la couleur en fonction de la vitesse
 sf::Color calculateColor(float const speed, float const maxSpeed, const bool isInert) {
-    if (isInert) {
-        return {32, 32, 32};  // Gris pour les objets inertes
-    }
+    if (isInert) return {24, 24, 24};
 
     const float ratio = std::min(speed / maxSpeed, 1.0f);
     const auto red = static_cast<sf::Uint8>(255 * ratio);

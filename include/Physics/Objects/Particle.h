@@ -9,7 +9,7 @@ class Particle {
 public:
     virtual ~Particle() = default;
 
-    Particle(Vector2f position, float mass);
+    Particle(Vector2f position);
 
     void applyForce(const Vector2f &force);
 

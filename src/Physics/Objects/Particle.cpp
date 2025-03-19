@@ -4,8 +4,8 @@
 
 #include "Physics/Objects/Particle.h"
 
-Particle::Particle(const Vector2f position, const float mass)
-    : position(position), velocity(0, 0), acceleration(0, 0), inert(false), active(true), mass(mass) {
+Particle::Particle(const Vector2f position)
+    : position(position), velocity(0, 0), acceleration(0, 0), inert(false), active(true), mass(1) {
 }
 
 void Particle::applyForce(const Vector2f &force) {
@@ -39,5 +39,6 @@ void Particle::setInert(const bool newInert) { inert = newInert; }
 [[nodiscard]] bool Particle::isActive() const { return active; }
 void Particle::setActive(const bool newActive) { active = newActive; }
 
-[[nodiscard]] float Particle::getMass() const { return mass; }
+[[nodiscard]] float Particle::getMass() const { if (isInert()) { return std::numeric_limits<float>::infinity(); } return mass; }
+
 void Particle::setMass(const float newMass) { mass = newMass; }

@@ -4,8 +4,8 @@
 
 #include "Physics/Objects/Polygon.h"
 
-Polygon::Polygon(const Vector2f &position, const float mass, const float friction, const std::vector<Vector2f> &verts)
-    : RigidBody(position, mass, friction), vertices(verts) {
+Polygon::Polygon(const Vector2f &position, const std::vector<Vector2f> &verts)
+    : RigidBody(position), vertices(verts) {
 }
 
 void Polygon::update(const float dt) {

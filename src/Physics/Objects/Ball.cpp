@@ -4,8 +4,8 @@
 
 #include "Physics/Objects/Ball.h"
 
-Ball::Ball(const Vector2f position, const float radius, const float mass, const float friction)
-    : RigidBody(position, mass, friction), radius(radius) {
+Ball::Ball(const Vector2f position, const float radius)
+    : RigidBody(position), radius(radius) {
 }
 
 void Ball::update(const float dt) {
@@ -22,6 +22,6 @@ float Ball::getRadius() const {
     return radius;
 }
 
-[[nodiscard]] BodyType Ball::getType() const override {
+[[nodiscard]] BodyType Ball::getType() const {
     return BodyType::Ball;
 }

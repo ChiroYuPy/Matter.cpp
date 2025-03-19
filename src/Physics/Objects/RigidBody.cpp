@@ -1,7 +1,15 @@
 #include "Physics/Objects/RigidBody.h"
 
-RigidBody::RigidBody(const Vector2f position, const float mass, const float friction)
-    : Particle(position, mass), friction(friction), angle(0) {
+RigidBody::RigidBody(const Vector2f position)
+    : Particle(position), restitution(0), friction(0), angle(0) {
+}
+
+void RigidBody::setRestitution(const float newRestitution) {
+    restitution = newRestitution;
+}
+
+float RigidBody::getRestitution() const {
+    return restitution;
 }
 
 void RigidBody::setFriction(const float newFriction) {

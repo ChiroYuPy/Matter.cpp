@@ -28,17 +28,19 @@ public:
 
     void clear();
 
-    void setGravity(const Vector2f newGravity) { gravity = newGravity; };
+    void setUpdatePerSeconds(int newUpdatePerSeconds);
 
-    [[nodiscard]] const std::vector<Particle *> &GetParticles() const { return particles; };
+    void setMaxUpdatePerFrame(int newMaxUpdatePerFrame);
 
-    [[nodiscard]] const std::vector<RigidBody *> &GetRigidBodies() const { return rigidBodies; };
+    void setGravity(Vector2f newGravity);
 
-    [[nodiscard]] const std::vector<Join *> &GetJoins() const { return joins; };
+    [[nodiscard]] const std::vector<Particle *>& GetParticles() const;
+
+    [[nodiscard]] const std::vector<RigidBody *>& GetRigidBodies() const;
+
+    [[nodiscard]] const std::vector<Join *>& GetJoins() const;
 
 private:
-    void stepWorld(float dt);
-
     void stepObjects(float dt);
 
     void stepJoins(float dt) const;
@@ -55,7 +57,11 @@ private:
 
     void resolveCollisions(RigidBody *bodyA, RigidBody *bodyB, const CollisionInfo &collision);
 
+    int updatePerSeconds = 1;
+    int maxUpdatePerFrame = 16;
+
     Vector2f gravity;
+
     std::vector<CollisionPair> collisionPairs;
 
     std::vector<Particle *> particles;

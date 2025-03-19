@@ -14,7 +14,7 @@ protected:
     mutable std::vector<Vector2f> rotatedVertices;
 
 public:
-    Polygon(const Vector2f &position, float mass, float friction, const std::vector<Vector2f> &verts);
+    Polygon(const Vector2f &position, const std::vector<Vector2f> &verts);
 
     void update(float dt) override;
 
