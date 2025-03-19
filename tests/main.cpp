@@ -48,13 +48,15 @@ void createAppObjects(World &world, const sf::RenderWindow &renderWindow) {
 
     for (int i = 0; i < NUM_OBJECTS; ++i) {
         float size = sizeDist(gen);
-        float mass = size;
+        const float mass = size;
         const float x = xDist(gen);
         const float y = yDist(gen);
         const bool isInert = inertDist(gen);
 
         auto obj = std::make_unique<Ball>(Vector2(x, y), size);
+        obj->setMass(mass);
         obj->setInert(isInert);
+        obj->setRestitution(1.f);
         world.addRigidBody(obj.release());
     }
 }
@@ -88,12 +90,13 @@ void createBallSet(World &world, const sf::RenderWindow &renderWindow) {
 
     for (int i = 0; i < NUM_OBJECTS; ++i) {
         float size = sizeDist(gen);
-        float mass = size;
+        const float mass = size;
         const float x = xDist(gen);
         const float y = yDist(gen);
         const bool isInert = inertDist(gen);
 
         auto obj = std::make_unique<Ball>(Vector2(x, y), size);
+        obj->setMass(mass);
         obj->setInert(isInert);
         world.addRigidBody(obj.release());
     }
@@ -111,12 +114,13 @@ void createBoxSet(World &world, const sf::RenderWindow &renderWindow) {
 
     for (int i = 0; i < NUM_OBJECTS; ++i) {
         float size = sizeDist(gen);
-        float mass = size;
+        const float mass = size;
         const float x = xDist(gen);
         const float y = yDist(gen);
         const bool isInert = inertDist(gen);
 
         auto obj = std::make_unique<Box>(Vector2(x, y), size, size);
+        obj->setMass(mass);
         obj->setInert(isInert);
         world.addRigidBody(obj.release());
     }

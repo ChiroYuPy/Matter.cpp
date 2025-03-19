@@ -27,7 +27,7 @@ void Solver::ApplyImpulse(RigidBody *bodyA, RigidBody *bodyB, const CollisionInf
     const Vector2f relativeVelocity = bodyA->getVelocity() - bodyB->getVelocity();
 
     if (const float velocityAlongNormal = Vector2f::Dot(relativeVelocity, collision.normal); velocityAlongNormal < 0) {
-        constexpr float restitution = 1.f;
+        const float restitution = std::min(bodyA->getRestitution(), bodyB->getRestitution());
         float impulse = -(1 + restitution) * velocityAlongNormal;
         impulse /= (1 / bodyA->getMass() + 1 / bodyB->getMass());
 
