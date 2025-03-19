@@ -62,16 +62,16 @@ void World::StepJoins(const float dt) const {
 
 void World::ApplyGravity() const {
     for (RigidBody *body: rigidBodies) {
-        if (!body->IsInert()) {
-            body->ApplyAcceleration(gravity);
+        if (!body->isInert()) {
+            body->applyAcceleration(gravity);
         }
     }
 }
 
 void World::ApplyAirFriction() const {
     for (RigidBody *body: rigidBodies) {
-        if (!body->IsInert()) {
-            body->getVelocity(body->getVelocity() * (1.0f - body->getFriction()));
+        if (!body->isInert()) {
+            body->setVelocity(body->getVelocity() * (1.0f - body->getFriction()));
         }
     }
 }
@@ -108,7 +108,7 @@ void World::BroadPhase() {
 
             // Vérification réelle de la collision avec les AABB
 
-            if (bodyA->IsInert() and bodyB->IsInert()) continue;
+            if (bodyA->isInert() and bodyB->isInert()) continue;
             if (!bodyA->getAABB().intersect(bodyB->getAABB())) continue;
 
             collisionPairs.emplace_back(bodyA, bodyB);

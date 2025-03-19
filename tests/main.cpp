@@ -1,78 +1,129 @@
 #include <random>
-#include <vector>
-#include <cmath>
-#include "Engine.h"
+#include <memory>
+#include <Renderer.h>
+#include <SFML/Graphics.hpp>
+
 #include "Physics/Objects/RigidBody.h"
 #include "Physics/Objects/Ball.h"
 #include "Physics/Objects/Box.h"
-#include "Physics/Objects/Join.h"
+#include "Physics/World.h"
 
-int main() {
-    Engine engine;
-    World &world = engine.GetWorld();
-    const sf::RenderWindow &renderWindow = engine.GetWindow();
+constexpr float WINDOW_SIZE = 1280.0f;
+constexpr float WALL_THICKNESS = 32.0f;
+constexpr float OBJECT_MASS_FACTOR = 1.0f;
+constexpr int NUM_OBJECTS = 256;
 
+void createWindowBox(World &world) {
+    std::vector<std::unique_ptr<Box>> walls;
+
+    walls.emplace_back(std::make_unique<Box>(Vector2f(WINDOW_SIZE / 2, WINDOW_SIZE - 14), WINDOW_SIZE, WALL_THICKNESS, 12, 0.f));
+    walls.emplace_back(std::make_unique<Box>(Vector2f(16, WINDOW_SIZE / 2), WALL_THICKNESS, WINDOW_SIZE - 64, 12, 0.f));
+    walls.emplace_back(std::make_unique<Box>(Vector2f(WINDOW_SIZE - 16, WINDOW_SIZE / 2), WALL_THICKNESS, WINDOW_SIZE - 64, 12, 0.f));
+    walls.emplace_back(std::make_unique<Box>(Vector2f(WINDOW_SIZE / 2, 16), WINDOW_SIZE, WALL_THICKNESS, 12, 0.f));
+
+    for (auto &wall : walls) {
+        wall->setInert(true);
+        world.AddRigidBody(wall.release());
+    }
+}
+
+void createSlopeBox(World &world, int numSlopes) {
+    for (int i = 0; i < numSlopes; ++i) {
+        auto slope = std::make_unique<Box>(Vector2f(WINDOW_SIZE / 2, 12), WINDOW_SIZE, WALL_THICKNESS, 12, 0.f);
+        slope->setInert(true);
+        world.AddRigidBody(slope.release());
+    }
+}
+
+void createAppObjects(World &world, const sf::RenderWindow &renderWindow) {
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    std::vector<RigidBody *> objects;
-    const float radius = 8.0f;  // Rayon des balles
-    const float horizontalDistance = 8.0f * radius;  // Distance horizontale entre les balles
-    const float verticalDistance = std::sqrt(8.0f) * radius;  // Distance verticale entre les balles
+    std::uniform_real_distribution<float> sizeDist(16.0f, 24.0f);
+    std::uniform_real_distribution<float> xDist(64.f, static_cast<float>(renderWindow.getSize().x) - 64.f);
+    std::uniform_real_distribution<float> yDist(64.f, static_cast<float>(renderWindow.getSize().y) / 2 - 64.f);
+    std::bernoulli_distribution inertDist(0.1);
 
-    // Placer les balles inertes en une grille hexagonale
-    const int numRows = 15;  // Nombre de lignes de balles
-    const int numCols = 15;  // Nombre de colonnes de balles
+    createWindowBox(world);
 
-    // Position centrale de la grille (au centre de l'écran)
-    const float centerX = static_cast<float>(renderWindow.getSize().x) / 2;
-    const float centerY = static_cast<float>(renderWindow.getSize().y) / 2;
+    for (int i = 0; i < NUM_OBJECTS; ++i) {
+        float size = sizeDist(gen);
+        float mass = size * OBJECT_MASS_FACTOR;
+        const float x = xDist(gen);
+        const float y = yDist(gen);
+        const bool isInert = inertDist(gen);
 
-    // Génération des balles pour la grille hexagonale
-    for (int row = 0; row < numRows; ++row) {
-        for (int col = 0; col < numCols; ++col) {
-            // Calculer la position (x, y) pour chaque balle
-            float x = centerX + (static_cast<float>(col) - static_cast<float>(numRows) / 2) * horizontalDistance;
-            float y = centerY + (static_cast<float>(row) - static_cast<float>(numCols) / 2) * verticalDistance;
+        auto obj = std::make_unique<Ball>(Vector2(x, y), size, mass, 0.f);
+        obj->setInert(isInert);
+        world.AddRigidBody(obj.release());
+    }
+}
 
-            // Décalage des lignes paires
-            if (row % 2 == 1) {
-                x += radius * 4;  // Décaler de 'radius' pour les colonnes impaires
-            }
+RigidBody *selectedObject = nullptr;
+World world;
+sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE, WINDOW_SIZE), "Physics Engine");
 
-            RigidBody *obj = new Ball(Vector2(x, y), radius, radius, 0.f);  // Création d'une balle
-            world.AddRigidBody(obj);
-            objects.push_back(obj);
+void HandleMouseClick(const sf::Vector2i &mousePos) {
+    Vector2 mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+
+    for (RigidBody *rb : world.GetRigidBodies()) {
+        if (rb->getAABB().contain(mousePosF)) {
+            selectedObject = rb;
+            break;
         }
     }
+}
 
-    // Ajout du sol et des murs
-    const auto ground = new Box(Vector2f(640, 1266), 1280, 32, 12, 0.f);
-    ground->SetInert(true);
-    world.AddRigidBody(ground);
+void HandleMouseRelease() {
+    selectedObject = nullptr;
+}
 
-    const auto wallLeft = new Box(Vector2f(16, 640), 1216, 32, 12, 0.f);
-    wallLeft->SetInert(true);
-    wallLeft->setAngle(std::numbers::pi * 0.5);
-    world.AddRigidBody(wallLeft);
+void handleEvent() {
+    sf::Event event{};
+    while (window.pollEvent(event)) {
+        switch (event.type) {
+            case sf::Event::Closed:
+                window.close();
+                break;
+            case sf::Event::MouseButtonPressed:
+                HandleMouseClick(sf::Mouse::getPosition(window));
+                break;
+            case sf::Event::MouseButtonReleased:
+                HandleMouseRelease();
+                break;
+            default:
+                break;
+        }
+    }
+}
 
-    const auto wallRight = new Box(Vector2f(1266, 640), 1216, 32, 12, 0.f);
-    wallRight->SetInert(true);
-    wallRight->setAngle(std::numbers::pi * 0.5);
-    world.AddRigidBody(wallRight);
+void update(const float dt) {
+    world.Update(dt);
 
-    const auto ceilling = new Box(Vector2f(640, 16), 1280, 32, 12, 0.f);
-    ceilling->SetInert(true);
-    world.AddRigidBody(ceilling);
+    if (selectedObject) {
+        const sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        selectedObject->setPosition(Vector2(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)));
+        selectedObject->setVelocity(Vector2f(0, 0));
+    }
+}
 
-    // Lancer le moteur
-    engine.Run();
-    world.Clear();
+void render() {
+    window.clear();
+    Renderer::render(window, world);
+    window.display();
+}
 
-    // Nettoyage mémoire
-    for (const RigidBody *obj: objects) {
-        delete obj;
+int main() {
+    sf::Clock clock;
+    createAppObjects(world, window);
+
+    while (window.isOpen()) {
+        const float dt = clock.restart().asSeconds();
+        handleEvent();
+        update(dt);
+        render();
     }
 
+    world.Clear();
     return 0;
 }

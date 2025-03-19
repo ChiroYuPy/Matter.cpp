@@ -11,26 +11,26 @@ public:
 
     Particle(Vector2f position, float mass);
 
-    void ApplyForce(const Vector2f &force);
+    void applyForce(const Vector2f &force);
 
-    void ApplyAcceleration(const Vector2f &force);
+    void applyAcceleration(const Vector2f &force);
 
     virtual void update(float dt);
 
-    [[nodiscard]] Vector2f GetPosition() const { return position; };
-    void SetPosition(const Vector2f newPosition) { position = newPosition; };
+    [[nodiscard]] Vector2f getPosition() const { return position; };
+    void setPosition(const Vector2f newPosition) { position = newPosition; };
 
     [[nodiscard]] Vector2f getVelocity() const { return velocity; };
-    void getVelocity(const Vector2f newPosition) { velocity = newPosition; };
+    void setVelocity(const Vector2f newPosition);;
     
-    [[nodiscard]] bool IsInert() const { return inert; };
-    void SetInert(const bool newInert) { inert = newInert; };
+    [[nodiscard]] bool isInert() const { return inert; };
+    void setInert(const bool newInert) { inert = newInert; };
 
-    [[nodiscard]] bool IsActive() const { return active; };
-    void SetActive(const bool newActive) { active = newActive; };
+    [[nodiscard]] bool isActive() const { return active; };
+    void setActive(const bool newActive) { active = newActive; };
 
-    [[nodiscard]] float GetMass() const { return mass; };
-    void SetMass(const float newMass) { mass = newMass; };
+    [[nodiscard]] float getMass() const { return mass; };
+    void setMass(const float newMass) { mass = newMass; };
 
 protected:
     Vector2f position;

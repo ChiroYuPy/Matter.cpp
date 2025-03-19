@@ -33,7 +33,7 @@ std::vector<Vector2f> Polygon::getVertices() const {
 
     rotatedVertices.clear();
 
-    const Vector2f center = GetPosition();
+    const Vector2f center = getPosition();
 
     for (const auto &v : vertices) {
         const Vector2f translated = v - center;

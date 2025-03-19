@@ -1,7 +1,6 @@
 #include "Physics/Collisioner.h"
 #include <cmath>
 #include "Physics/Objects/Box.h"
-#include <iostream>
 
 CollisionInfo Collisioner::TestCollision(RigidBody *rb1, RigidBody *rb2) {
     auto collisionInfo = CollisionInfo(false, Vector2f(), 0.0f);
@@ -26,7 +25,7 @@ CollisionInfo Collisioner::TestCollision(RigidBody *rb1, RigidBody *rb2) {
 }
 
 CollisionInfo Collisioner::TestBallsCollision(const Ball *ball1, const Ball *ball2) {
-    const Vector2 distance = ball1->GetPosition() - ball2->GetPosition();
+    const Vector2 distance = ball1->getPosition() - ball2->getPosition();
 
     if (const float radiusSum = ball1->GetRadius() + ball2->GetRadius(); Vector2f::Length(distance) <= radiusSum) {
         const Vector2 normal = distance / Vector2f::Length(distance);
@@ -41,7 +40,7 @@ CollisionInfo Collisioner::TestBallsCollision(const Ball *ball1, const Ball *bal
 
 CollisionInfo Collisioner::TestBallPolygonCollision(const Ball *ball, const Polygon *poly) {
     const std::vector<Vector2f> &vertices = poly->getVertices();
-    const Vector2f ballPos = ball->GetPosition();
+    const Vector2f ballPos = ball->getPosition();
     const float ballRadius = ball->GetRadius();
 
     Vector2f normal(0, 0);
@@ -62,7 +61,7 @@ CollisionInfo Collisioner::TestBallPolygonCollision(const Ball *ball, const Poly
             return CollisionInfo(false, Vector2f(), 0.0f);
         }
 
-        if (float axisDepth = std::min(maxB - minA, maxA - minB); axisDepth < depth) {
+        if (const float axisDepth = std::min(maxB - minA, maxA - minB); axisDepth < depth) {
             depth = axisDepth;
             normal = axis;
         }
@@ -86,7 +85,7 @@ CollisionInfo Collisioner::TestBallPolygonCollision(const Ball *ball, const Poly
         normal = axis;
     }
 
-    if (const Vector2f direction = poly->GetPosition() - ballPos; Vector2f::Dot(normal, direction) < 0) {
+    if (const Vector2f direction = poly->getPosition() - ballPos; Vector2f::Dot(normal, direction) < 0) {
         normal = -normal;
     }
 
@@ -178,8 +177,8 @@ size_t Collisioner::findClosestPointOnPolygon(const Vector2f &circleCenter, cons
     float minDistance = std::numeric_limits<float>::infinity();
 
     for (size_t i = 0; i < vertices.size(); ++i) {
-        const float distance = std::sqrt(std::pow(vertices[i].x - circleCenter.x, 2) +
-                                         std::pow(vertices[i].y - circleCenter.y, 2));
+        const auto distance = static_cast<float>(std::sqrt(std::pow(vertices[i].x - circleCenter.x, 2) +
+                                         std::pow(vertices[i].y - circleCenter.y, 2)));
 
         if (distance < minDistance) {
             minDistance = distance;

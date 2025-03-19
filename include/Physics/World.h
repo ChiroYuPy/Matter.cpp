@@ -19,6 +19,8 @@ struct CollisionPair {
 
 class World {
 public:
+    World();
+
     explicit World(Vector2f gravity);
 
     void AddParticle(Particle *particle);

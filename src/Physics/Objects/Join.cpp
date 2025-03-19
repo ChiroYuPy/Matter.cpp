@@ -11,7 +11,7 @@ Join::Join(Particle& objA, Particle& objB, const float length, const float stiff
 
 void Join::update(const float dt) const {
 
-    const Vector2 deltaP = objB.GetPosition() - objA.GetPosition();
+    const Vector2 deltaP = objB.getPosition() - objA.getPosition();
   	const Vector2 deltaV = objB.getVelocity() - objA.getVelocity();
 
     const float distance = std::sqrt(deltaP.x * deltaP.x + deltaP.y * deltaP.y);
@@ -32,6 +32,6 @@ void Join::update(const float dt) const {
     // }
 
     const Vector2 force = direction * total_force_magnitude;
-    objA.ApplyForce(force);
-    objB.ApplyForce( - force);
+    objA.applyForce(force);
+    objB.applyForce( - force);
 }
