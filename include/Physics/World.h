@@ -12,9 +12,6 @@
 struct CollisionPair {
     RigidBody *bodyA;
     RigidBody *bodyB;
-
-    CollisionPair(RigidBody *a, RigidBody *b) : bodyA(a), bodyB(b) {
-    }
 };
 
 class World {
@@ -29,7 +26,7 @@ public:
 
     void update(float dt);
 
-    void Clear();
+    void clear();
 
     void setGravity(const Vector2f newGravity) { gravity = newGravity; };
 
@@ -54,9 +51,9 @@ private:
 
     void broadPhase();
 
-    void NarrowPhase();
+    void narrowPhase();
 
-    void ResolveCollisions(RigidBody *bodyA, RigidBody *bodyB, const CollisionInfo &collision);
+    void resolveCollisions(RigidBody *bodyA, RigidBody *bodyB, const CollisionInfo &collision);
 
     Vector2f gravity;
     std::vector<CollisionPair> collisionPairs;

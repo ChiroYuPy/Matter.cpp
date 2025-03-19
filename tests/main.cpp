@@ -134,6 +134,6 @@ int main() {
         render(renderWindow, world);
     }
 
-    world.Clear();
+    world.clear();
     return 0;
 }

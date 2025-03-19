@@ -77,7 +77,7 @@ void World::detectCollisions() {
     broadPhase();
 
     // advanced detection
-    NarrowPhase();
+    narrowPhase();
 }
 
 void World::broadPhase() {
@@ -113,7 +113,7 @@ void World::broadPhase() {
     }
 }
 
-void World::NarrowPhase() {
+void World::narrowPhase() {
     for (const CollisionPair &pair: collisionPairs) {
         if (CollisionInfo collision = Collisioner::TestCollision(pair.bodyA, pair.bodyB); collision.collided) {
             Solver::ResolveCollision(pair.bodyA, pair.bodyB, collision);
@@ -121,7 +121,7 @@ void World::NarrowPhase() {
     }
 }
 
-void World::Clear() {
+void World::clear() {
     for (const Particle *p: particles) {
         delete p;
     }
