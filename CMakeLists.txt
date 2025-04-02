@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(MatterTest)
+project(MatterTest VERSION 1.0.0)
 
 # find_package(SFML 2.5 REQUIRED graphics window system)
 
