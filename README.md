@@ -22,7 +22,11 @@
 - **CMake** (for compilation)
 - **SFML** *(optional, for graphical rendering)*
 
-### 📦 Clone and Compile
+### 📦 Setup
+
+You can use **Matter.cpp** as a library by placing the `MATTER` folder inside your system's `include` directory and the compiled `.a` file inside your `lib` directory.
+
+Alternatively, you can clone and compile it manually:
 
 ```bash
 git clone https://github.com/ChiroYuPy/Matter.cpp.git
