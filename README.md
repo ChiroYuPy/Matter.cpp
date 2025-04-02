@@ -1,4 +1,4 @@
-<img src="assets/logo.png" alt="Logo" width="200" height="100" />
+<img src="assets/logo.png" alt="Logo" width="256" />
 
 # 🏗 Matter.cpp – 2D Physics Engine in C++
 
