@@ -1,9 +1,10 @@
+![Logo](assets/logo.png)
+
 # 🏗 Matter.cpp – 2D Physics Engine in C++
 
 ## 🚀 Description
 
 **Matter.cpp** is a **C++23** 2D physics engine for real-time simulation of **rigid polygonal bodies**. It supports collision handling, rotation, and forces to create dynamic and precise physics simulations.
-![Uploading physics-4.png…]()
 
 ### 🔥 Key Features
 
