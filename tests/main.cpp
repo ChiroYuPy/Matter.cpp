@@ -1,199 +1,101 @@
-#include <random>
-#include <memory>
-#include <Renderer.h>
+//
+// Created by adrian on 02/04/25.
+//
+
 #include <SFML/Graphics.hpp>
-
-#include "Physics/Objects/RigidBody.h"
-#include "Physics/Objects/Ball.h"
-#include "Physics/Objects/Box.h"
-#include "Physics/World.h"
-
-constexpr float WINDOW_WIDTH = 1280.0f;
-constexpr float WINDOW_HEIGHT = 1280.0f;
-constexpr float WALL_THICKNESS = 32.0f;
-constexpr int NUM_OBJECTS = 256;
-
-void createWindowBox(World &world) {
-    std::vector<std::unique_ptr<Box>> walls;
-
-    walls.emplace_back(std::make_unique<Box>(Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT), WINDOW_WIDTH, WALL_THICKNESS));
-    walls.emplace_back(std::make_unique<Box>(Vector2f(0, WINDOW_HEIGHT / 2), WALL_THICKNESS, WINDOW_HEIGHT));
-    walls.emplace_back(std::make_unique<Box>(Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT / 2), WALL_THICKNESS, WINDOW_HEIGHT));
-    walls.emplace_back(std::make_unique<Box>(Vector2f(WINDOW_WIDTH / 2, 0), WINDOW_WIDTH, WALL_THICKNESS));
-
-    for (auto &wall : walls) {
-        wall->setInert(true);
-        world.addRigidBody(wall.release());
-    }
-}
-
-void createSlopeBox(World &world, const int numSlopes) {
-    for (int i = 0; i < numSlopes; ++i) {
-        auto slope = std::make_unique<Box>(Vector2f(WINDOW_WIDTH / 2, 12), WINDOW_HEIGHT, WALL_THICKNESS);
-        slope->setInert(true);
-        world.addRigidBody(slope.release());
-    }
-}
-
-void createAppObjects(World &world, const sf::RenderWindow &renderWindow) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-
-    std::uniform_real_distribution sizeDist(16.0f, 24.0f);
-    std::uniform_real_distribution xDist(64.f, static_cast<float>(renderWindow.getSize().x) - 64.f);
-    std::uniform_real_distribution yDist(64.f, static_cast<float>(renderWindow.getSize().y) / 2 - 64.f);
-    std::bernoulli_distribution inertDist(0.1);
-
-    createWindowBox(world);
-
-    for (int i = 0; i < NUM_OBJECTS; ++i) {
-        float size = sizeDist(gen);
-        const float mass = size;
-        const float x = xDist(gen);
-        const float y = yDist(gen);
-        const bool isInert = inertDist(gen);
-
-        auto obj = std::make_unique<Ball>(Vector2(x, y), size);
-        obj->setMass(mass);
-        obj->setInert(isInert);
-        obj->setRestitution(1.f);
-        world.addRigidBody(obj.release());
-    }
-}
-
-RigidBody *selectedObject = nullptr;
-
-void HandleMouseClick(const sf::Vector2i &mousePos, const World& world) {
-    const Vector2 mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
-
-    for (RigidBody *rb : world.GetRigidBodies()) {
-        if (rb->getAABB().contain(mousePosF)) {
-            selectedObject = rb;
-            break;
-        }
-    }
-}
-
-void HandleMouseRelease() {
-    selectedObject = nullptr;
-}
-
-void createBallSet(World &world, const sf::RenderWindow &renderWindow) {
-    world.clear();
-    createWindowBox(world);
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution sizeDist(16.0f, 24.0f);
-    std::uniform_real_distribution xDist(64.f, static_cast<float>(renderWindow.getSize().x) - 64.f);
-    std::uniform_real_distribution yDist(64.f, static_cast<float>(renderWindow.getSize().y) / 2 - 64.f);
-    std::bernoulli_distribution inertDist(0.1);
-
-    for (int i = 0; i < NUM_OBJECTS; ++i) {
-        float size = sizeDist(gen);
-        const float mass = size;
-        const float x = xDist(gen);
-        const float y = yDist(gen);
-        const bool isInert = inertDist(gen);
-
-        auto obj = std::make_unique<Ball>(Vector2(x, y), size);
-        obj->setMass(mass);
-        obj->setInert(isInert);
-        world.addRigidBody(obj.release());
-    }
-}
-
-void createBoxSet(World &world, const sf::RenderWindow &renderWindow) {
-    world.clear();
-    createWindowBox(world);
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution sizeDist(32.0f, 48.0f);
-    std::uniform_real_distribution xDist(64.f, static_cast<float>(renderWindow.getSize().x) - 64.f);
-    std::uniform_real_distribution yDist(64.f, static_cast<float>(renderWindow.getSize().y) / 2 - 64.f);
-    std::bernoulli_distribution inertDist(0.1);
-
-    for (int i = 0; i < NUM_OBJECTS; ++i) {
-        float size = sizeDist(gen);
-        const float mass = size;
-        const float x = xDist(gen);
-        const float y = yDist(gen);
-        const bool isInert = inertDist(gen);
-
-        auto obj = std::make_unique<Box>(Vector2(x, y), size, size);
-        obj->setMass(mass);
-        obj->setInert(isInert);
-        world.addRigidBody(obj.release());
-    }
-}
-
-
-void handleEvent(sf::RenderWindow& renderWindow, World& world) {
-    sf::Event event{};
-    while (renderWindow.pollEvent(event)) {
-        switch (event.type) {
-            case sf::Event::Closed:
-                renderWindow.close();
-            break;
-            case sf::Event::MouseButtonPressed:
-                HandleMouseClick(sf::Mouse::getPosition(renderWindow), world);
-            break;
-            case sf::Event::MouseButtonReleased:
-                HandleMouseRelease();
-            break;
-            case sf::Event::KeyPressed:
-                switch (event.key.code) {
-                    case sf::Keyboard::Num1:
-                        createBallSet(world, renderWindow);
-                    break;
-                    case sf::Keyboard::Num2:
-                        createBoxSet(world, renderWindow);
-                    break;
-                    default:
-                        break;
-                }
-            break;
-            default:
-                break;
-        }
-    }
-}
-
-
-void update(const float dt, const sf::RenderWindow& renderWindow, World& world) {
-    world.update(dt);
-
-    if (selectedObject) {
-        const sf::Vector2i mousePos = sf::Mouse::getPosition(renderWindow);
-        selectedObject->setPosition(Vector2(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)));
-        selectedObject->setVelocity(Vector2f(0, 0));
-    }
-}
-
-void render(sf::RenderWindow& renderWindow, World& world) {
-    renderWindow.clear({32, 32, 32});
-    Renderer::render(renderWindow, world);
-    renderWindow.display();
-}
+#include <MATTER/Matter.h>
+#include <iostream>
+#include <memory>
+#include <cstdlib>  // Pour std::rand()
 
 int main() {
+
+    // sfml setup
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Physics Simulation");
+
+    // MATTER setup
     World world;
-    world.setUpdatePerSeconds(256);
-    world.setMaxUpdatePerFrame(8);
     world.setGravity({0, 98.1f});
-    sf::RenderWindow renderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Physics Engine");
-    sf::Clock clock;
 
-    renderWindow.setFramerateLimit(256);
-    createAppObjects(world, renderWindow);
+    auto wall1 = Box({0, 0}, 800, 10);
+    wall1.setInert(true);
 
-    while (renderWindow.isOpen()) {
-        const float dt = clock.restart().asSeconds();
-        std::cout << 1/dt << std::endl;
-        handleEvent(renderWindow, world);
-        update(dt, renderWindow, world);
-        render(renderWindow, world);
+    auto wall2 = Box({0, 0}, 10, 600);
+    wall2.setInert(true);
+
+    auto wall3 = Box({790, 0}, 10, 600);
+    wall3.setInert(true);
+
+    auto wall4 = Box({0, 590}, 800, 10);
+    wall4.setInert(true);
+
+    world.addRigidBody(&wall1);
+    world.addRigidBody(&wall2);
+    world.addRigidBody(&wall3);
+    world.addRigidBody(&wall4);
+
+    // Création des balles (en utilisant un vecteur de pointeurs)
+    std::vector<std::unique_ptr<Ball>> balls;
+    for (int i = 0; i < 256; ++i) {
+        // Position aléatoire des balles
+        float randomX = static_cast<float>(window.getSize().x / 2) * (-0.5f + static_cast<float>(std::rand()) / RAND_MAX);
+        float randomY = static_cast<float>(window.getSize().y / 2) * (-0.5f + static_cast<float>(std::rand()) / RAND_MAX);
+        Vector2f vector = {randomX, randomY};
+
+        auto ball = std::make_unique<Ball>(vector, 0);
+        ball->setPosition(vector);
+        world.addRigidBody(ball.get());  // Ajout au monde
+        balls.push_back(std::move(ball)); // Stockage de la balle dans le vecteur
     }
 
-    world.clear();
+    while (window.isOpen()) {
+        constexpr float dt = 0.016f;
+        sf::Event event{};
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        world.update(dt);
+
+        window.clear();
+
+        // Dessiner les balles
+        for (auto& ball : balls) {
+            sf::CircleShape ballShape(32);
+            ballShape.setOrigin({32, 32});
+            ballShape.setPosition(ball->getPosition().x, ball->getPosition().y);
+            ballShape.setFillColor(sf::Color::Green);
+            window.draw(ballShape);
+        }
+
+        // Dessiner les murs
+        sf::RectangleShape wallShape1(sf::Vector2f(800.f, 10.f));  // Mur supérieur
+        wallShape1.setPosition(wall1.getPosition().x, wall1.getPosition().y);
+        wallShape1.setFillColor(sf::Color::Blue);
+        window.draw(wallShape1);
+
+        sf::RectangleShape wallShape2(sf::Vector2f(10.f, 600.f));  // Mur gauche
+        wallShape2.setPosition(wall2.getPosition().x, wall2.getPosition().y);
+        wallShape2.setFillColor(sf::Color::Blue);
+        window.draw(wallShape2);
+
+        sf::RectangleShape wallShape3(sf::Vector2f(10.f, 600.f));  // Mur droit
+        wallShape3.setPosition(wall3.getPosition().x, wall3.getPosition().y);
+        wallShape3.setFillColor(sf::Color::Blue);
+        window.draw(wallShape3);
+
+        sf::RectangleShape wallShape4(sf::Vector2f(800.f, 10.f));  // Mur inférieur
+        wallShape4.setPosition(wall4.getPosition().x, wall4.getPosition().y);
+        wallShape4.setFillColor(sf::Color::Blue);
+        window.draw(wallShape4);
+
+        window.display();
+
+        std::cout << "Ball Position: " << balls[0]->getPosition().x << " " << balls[0]->getPosition().y << std::endl;
+
+        sf::sleep(sf::milliseconds(16));
+    }
+
     return 0;
 }

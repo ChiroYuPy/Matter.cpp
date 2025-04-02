@@ -1,15 +1,7 @@
-cmake_minimum_required(VERSION 3.10)
-project(Matter_cpp CXX)
+cmake_minimum_required(VERSION 3.16)
+project(App)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+# find_package(SFML 2.5 REQUIRED graphics window system)
 
-find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
-
-include_directories(include)
-
-file(GLOB_RECURSE SOURCES "src/*.cpp" "tests/main.cpp")
-
-add_executable(Matter_cpp tests/main ${SOURCES})
-
-target_link_libraries(Matter_cpp sfml-graphics sfml-window sfml-system)
+add_executable(app tests/main.cpp)
+target_link_libraries(app PRIVATE Matter sfml-graphics sfml-window sfml-system)
