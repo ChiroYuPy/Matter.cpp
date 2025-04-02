@@ -1,31 +1,28 @@
-# 🏗 Matter.cpp – Moteur Physique 2D en C++
+# 🏗 Matter.cpp – 2D Physics Engine in C++
 
 ## 🚀 Description
 
-**Matter.cpp** est un moteur physique 2D en **C++** permettant de simuler des corps rigides et des **softbodies** en
-temps réel. Il gère les collisions, la friction, la rotation et les forces avec une approche optimisée pour des
-simulations interactives et fluides.
+**Matter.cpp** is a **C++23** 2D physics engine for real-time simulation of **rigid polygonal bodies**. It supports collision handling, rotation, and forces to create dynamic and precise physics simulations.
 
-### 🔥 Fonctionnalités principales
+### 🔥 Key Features
 
-- **Corps rigides** : boîtes, cercles, polygones
-- **Rotation et friction** : interactions réalistes
-- **Collisions et restitution** : détection et réponse physique
-- **Softbodies** : objets déformables avec particules et contraintes
-- **Simulation en temps réel** : optimisée pour les jeux et applications
-- **Support SFML** (optionnel) pour le rendu graphique
+- **Rigid bodies**: Supports polygons (boxes, custom shapes, etc.).
+- **Force-based physics engine**: Velocity, acceleration, gravity.
+- **Collision & AABB**: Bounding box collision detection and handling.
+- **Rotation & transformation**: Angle and movement management.
+- **SFML support** (optional) for graphical rendering.
 
 ---
 
 ## 📥 Installation
 
-### 🔷 Prérequis
+### 🔷 Requirements
 
-- **C++17 ou supérieur**
-- **CMake** (pour la compilation)
-- **SFML** *(optionnel, pour l'affichage graphique)*
+- **C++23**
+- **CMake** (for compilation)
+- **SFML** *(optional, for graphical rendering)*
 
-### 📦 Cloner et compiler
+### 📦 Clone and Compile
 
 ```bash
 git clone https://github.com/ChiroYuPy/Matter.cpp.git
@@ -37,104 +34,63 @@ make
 
 ---
 
-## 🎮 Utilisation
+## 🎮 Usage
 
-### 🏗 Exemple de simulation de corps rigides
+### 🏗 Example: Creating a Polygon
 
-Le code ci-dessous crée un **monde physique** avec une boîte et une balle, et les simule à **60 FPS**.
+The following code creates a polygon and retrieves its AABB (axis-aligned bounding box) after transformation:
 
 ```cpp
-#include "Matter.h"
+#include "MATTER/objects/Polygon.h"
 
 int main() {
-    Matter::World world;
-
-    // Création d'une boîte et d'une balle
-    auto box = world.createRigidBody(Shape::Box, 200, 100, 50, 50, 1); // shape, x, y, width, height, mass
-    auto ball = world.createRigidBody(Shape::Circle, 250, 200, 20, 1); // shape, x, y, radius, ùass
-
-    boolean running = true;
-    while (running) {
-        world.update(1.0 / 60.0);  // 60 FPS
-        // rendering
-    }
-
+    std::vector<Vector2f> vertices = {
+        { -50, -50 }, { 50, -50 }, { 50, 50 }, { -50, 50 }
+    };
+    
+    Polygon polygon({100, 100}, vertices);
+    polygon.update(1.0f / 60.0f); // Physics update
+    
+    AABB bounds = polygon.getAABB();
+    std::cout << "AABB Min: (" << bounds.min.x << ", " << bounds.min.y << ")\n";
+    std::cout << "AABB Max: (" << bounds.max.x << ", " << bounds.max.y << ")\n";
+    
     return 0;
 }
 ```
 
-### 🔗 Exemple de simulation de **softbody** avec particules et contraintes
+### 🔄 Example: Dynamic Updates
 
 ```cpp
-#include "Matter.h"
-
-int main() {
-    Matter::World world;
-
-    // Création d'un softbody composé de particules
-    auto softbody = world.createSoftBody(300, 300, 5, 5, 10, 12); // x, y, rows, cols, spacing, mass
-    softbody->setElasticity(0.9);
-    softbody->setDamping(0.1);
-
-    boolean running = true;
-    while (running) {
-        world.update(1.0 / 60.0);  // 60 FPS
-        // rendering
-    }
-
-    return 0;
-}
+polygon.applyForce(Vector2f(10.0f, -5.0f)); // Apply force
+polygon.update(1.0f / 60.0f); // Physics update
 ```
 
 ---
 
-## 🔧 Personnalisation et Extensions
+## 📌 Examples & Demos
 
-### Modifier les propriétés d'un objet
-
-```cpp
-box->setFriction(0.5);
-box->setRestitution(0.8); // Coefficient de rebond
-box->setVelocity(10, -5);
-```
-
-### Ajouter une force externe
-
-```cpp
-ball->applyForce(Matter::Vector(0, -10));  // Gravitation inversée
-```
-
-### Créer une contrainte entre deux objets
-
-```cpp
-auto constraint = world.createConstraint(box, ball, 100); // Distance fixe de 100px
-```
-
----
-
-## 📌 Exemples et Démonstrations
-
-- **RigidBody Demo** : Simulation de boîtes et cercles en collision
+- **Box & Polygon**: Collision simulation between rigid shapes.
+- **Transformation**: Polygon rotation and scaling.
 
 ---
 
 ## 🤝 Contribution
 
-Tu veux améliorer **Matter.cpp** ? Toutes les contributions sont les bienvenues ! 🚀
+Want to improve **Matter.cpp**? Contributions are welcome! 🚀
 
-1. **Fork** le projet
-2. Crée une **branche** (`git checkout -b feature/amélioration`)
-3. **Commit** tes modifications (`git commit -am "Ajout d'une nouvelle feature"`)
-4. **Push** vers ton repo (`git push origin feature/amélioration`)
-5. Fais une **Pull Request**
+1. **Fork** the project
+2. Create a **branch** (`git checkout -b feature/improvement`)
+3. **Commit** your changes (`git commit -am "Fix Polygon transformation"`)
+4. **Push** to your repo (`git push origin feature/improvement`)
+5. Submit a **Pull Request**
 
 ---
 
 ## 📝 License
 
-Ce projet est sous la licence MIT. Consulte le fichier [LICENSE](LICENSE) pour plus d’informations.
+This project is under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
-🔗 **Auteur** : [ChiroYuPy](https://github.com/ChiroYuPy)  
-⭐ **Si ce projet t’intéresse, n’hésite pas à laisser une étoile !**
+🔗 **Author**: [ChiroYuPy](https://github.com/ChiroYuPy)  
+⭐ **If you like this project, don't forget to leave a star!**
 
-![MatterCppExemple](https://github.com/user-attachments/assets/3f8bd4a1-fe9d-4e56-b544-1d485ccf6d59)
