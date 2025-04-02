@@ -8,17 +8,18 @@ Polygon::Polygon(const Vector2f &position, const std::vector<Vector2f> &verts)
     : RigidBody(position), vertices(verts) {
 }
 
-void Polygon::update(const float dt) {
+void Polygon::update(float dt) {
     RigidBody::update(dt);
 }
 
 AABB Polygon::getAABB() const {
-    if (rotatedVertices.empty()) return {Vector2f(), Vector2f()};
+    auto transformedVertices = getVertices();
+    if (transformedVertices.empty()) return {Vector2f(), Vector2f()};
 
-    Vector2 min = rotatedVertices[0];
-    Vector2 max = rotatedVertices[0];
+    Vector2f min = transformedVertices[0];
+    Vector2f max = transformedVertices[0];
 
-    for (const auto &v: rotatedVertices) {
+    for (const auto &v : transformedVertices) {
         min.x = std::min(min.x, v.x);
         min.y = std::min(min.y, v.y);
         max.x = std::max(max.x, v.x);
@@ -29,22 +30,18 @@ AABB Polygon::getAABB() const {
 }
 
 std::vector<Vector2f> Polygon::getVertices() const {
+    std::vector<Vector2f> transformedVertices;
+    transformedVertices.reserve(vertices.size());
 
-
-    rotatedVertices.clear();
-
-    const Vector2f center = getPosition();
+    const Vector2f position = getPosition();
+    const float cosA = std::cos(angle);
+    const float sinA = std::sin(angle);
 
     for (const auto &v : vertices) {
-        const Vector2f translated = v - center;
-
-        const float cos = std::cos(angle);
-        const float sin = std::sin(angle);
-        float const xNew = translated.x * cos - translated.y * sin;
-        float const yNew = translated.x * sin + translated.y * cos;
-
-        rotatedVertices.emplace_back(xNew + center.x, yNew + center.y);
+        const float xNew = v.x * cosA - v.y * sinA;
+        const float yNew = v.x * sinA + v.y * cosA;
+        transformedVertices.emplace_back(xNew + position.x, yNew + position.y);
     }
 
-    return rotatedVertices;
+    return transformedVertices;
 }

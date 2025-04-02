@@ -1,7 +1,3 @@
-//
-// Created by adrian on 02/04/25.
-//
-
 #include <SFML/Graphics.hpp>
 #include <MATTER/Matter.h>
 #include <iostream>
@@ -15,34 +11,48 @@ int main() {
 
     // MATTER setup
     World world;
+    world.setUpdatePerSeconds(256);
+    world.setMaxUpdatePerFrame(16);
     world.setGravity({0, 98.1f});
 
-    auto wall1 = Box({0, 0}, 800, 10);
-    wall1.setInert(true);
+    float windowWidth = static_cast<float>(window.getSize().x);
+    float windowHeight = static_cast<float>(window.getSize().y);
 
-    auto wall2 = Box({0, 0}, 10, 600);
-    wall2.setInert(true);
+    auto wall1 = std::make_unique<Box>(Vector2f(windowWidth / 2, 10), windowWidth, 20);
+    wall1->setInert(true);
 
-    auto wall3 = Box({790, 0}, 10, 600);
-    wall3.setInert(true);
+    auto wall2 = std::make_unique<Box>(Vector2f(10, windowHeight / 2), 20, windowHeight);
+    wall2->setInert(true);
 
-    auto wall4 = Box({0, 590}, 800, 10);
-    wall4.setInert(true);
+    auto wall3 = std::make_unique<Box>(Vector2f(windowWidth / 2, windowHeight - 10), windowWidth, 20);
+    wall3->setInert(true);
 
-    world.addRigidBody(&wall1);
-    world.addRigidBody(&wall2);
-    world.addRigidBody(&wall3);
-    world.addRigidBody(&wall4);
+    auto wall4 = std::make_unique<Box>(Vector2f(windowWidth - 10, windowHeight / 2), 20, windowHeight);
+    wall4->setInert(true);
+
+    auto dynBox = std::make_unique<Box>(Vector2f(windowWidth / 2, windowHeight / 2), 50, 50); // Une boîte dynamique
+    dynBox->setInert(false);
+
+    std::vector<std::unique_ptr<Box>> boxs;
+    boxs.push_back(std::move(wall1));
+    boxs.push_back(std::move(wall2));
+    boxs.push_back(std::move(wall3));
+    boxs.push_back(std::move(wall4));
+    boxs.push_back(std::move(dynBox));
+
+    for (auto& box : boxs) {
+        world.addRigidBody(box.get());
+    }
 
     // Création des balles (en utilisant un vecteur de pointeurs)
     std::vector<std::unique_ptr<Ball>> balls;
-    for (int i = 0; i < 256; ++i) {
+    for (int i = 0; i < 3; ++i) {
         // Position aléatoire des balles
-        float randomX = static_cast<float>(window.getSize().x / 2) * (-0.5f + static_cast<float>(std::rand()) / RAND_MAX);
-        float randomY = static_cast<float>(window.getSize().y / 2) * (-0.5f + static_cast<float>(std::rand()) / RAND_MAX);
+        float randomX = static_cast<float>(window.getSize().x) * (0.25f + static_cast<float>(std::rand() * 0.5) / RAND_MAX);
+        float randomY = static_cast<float>(window.getSize().y) * (0.25f + static_cast<float>(std::rand() * 0.5) / RAND_MAX);
         Vector2f vector = {randomX, randomY};
 
-        auto ball = std::make_unique<Ball>(vector, 0);
+        auto ball = std::make_unique<Ball>(vector, 16);
         ball->setPosition(vector);
         world.addRigidBody(ball.get());  // Ajout au monde
         balls.push_back(std::move(ball)); // Stockage de la balle dans le vecteur
@@ -62,37 +72,25 @@ int main() {
 
         // Dessiner les balles
         for (auto& ball : balls) {
-            sf::CircleShape ballShape(32);
-            ballShape.setOrigin({32, 32});
+            float radius = ball->getRadius();
+            sf::CircleShape ballShape(radius);
+            ballShape.setOrigin({radius, radius});
             ballShape.setPosition(ball->getPosition().x, ball->getPosition().y);
             ballShape.setFillColor(sf::Color::Green);
             window.draw(ballShape);
         }
 
-        // Dessiner les murs
-        sf::RectangleShape wallShape1(sf::Vector2f(800.f, 10.f));  // Mur supérieur
-        wallShape1.setPosition(wall1.getPosition().x, wall1.getPosition().y);
-        wallShape1.setFillColor(sf::Color::Blue);
-        window.draw(wallShape1);
-
-        sf::RectangleShape wallShape2(sf::Vector2f(10.f, 600.f));  // Mur gauche
-        wallShape2.setPosition(wall2.getPosition().x, wall2.getPosition().y);
-        wallShape2.setFillColor(sf::Color::Blue);
-        window.draw(wallShape2);
-
-        sf::RectangleShape wallShape3(sf::Vector2f(10.f, 600.f));  // Mur droit
-        wallShape3.setPosition(wall3.getPosition().x, wall3.getPosition().y);
-        wallShape3.setFillColor(sf::Color::Blue);
-        window.draw(wallShape3);
-
-        sf::RectangleShape wallShape4(sf::Vector2f(800.f, 10.f));  // Mur inférieur
-        wallShape4.setPosition(wall4.getPosition().x, wall4.getPosition().y);
-        wallShape4.setFillColor(sf::Color::Blue);
-        window.draw(wallShape4);
+        for (auto& box : boxs) {
+            float width = box->getWidth();
+            float height = box->getHeight();
+            sf::RectangleShape rectangleShape(sf::Vector2f(width, height));
+            rectangleShape.setOrigin({width / 2, height / 2});
+            rectangleShape.setPosition(box->getPosition().x, box->getPosition().y);
+            rectangleShape.setFillColor(sf::Color::Blue);
+            window.draw(rectangleShape);
+        }
 
         window.display();
-
-        std::cout << "Ball Position: " << balls[0]->getPosition().x << " " << balls[0]->getPosition().y << std::endl;
 
         sf::sleep(sf::milliseconds(16));
     }

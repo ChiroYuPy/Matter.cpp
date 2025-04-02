@@ -11,7 +11,7 @@
 
 class Ball : public RigidBody {
 public:
-    Ball(Vector2f position, float friction);
+    Ball(Vector2f position, float radius);
 
     void update(float dt) override;
 

@@ -14,6 +14,9 @@ public:
     Box(const Vector2f &position, float width, float height);
 
     void update(float dt) override;
+
+    float getWidth() const;
+    float getHeight() const;
 };
 
 #endif // BOX_H

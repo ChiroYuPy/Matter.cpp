@@ -14,6 +14,7 @@ CollisionInfo Collisioner::TestCollision(RigidBody *rb1, RigidBody *rb2) {
     } else if (const auto *poly1 = dynamic_cast<Polygon *>(rb1)) {
         if (const auto *ball2 = dynamic_cast<Ball *>(rb2)) {
             collisionInfo = TestBallPolygonCollision(ball2, poly1);
+
         } else if (const auto *poly2 = dynamic_cast<Polygon *>(rb2)) {
             collisionInfo = TestPolygonsCollision(poly1, poly2);
         }
