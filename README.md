@@ -36,42 +36,64 @@ make
 
 ## 🎮 Usage
 
-### 🏗 Example: Creating a Polygon
+### 🏗 Example: Physics Simulation with SFML
 
-The following code creates a polygon and retrieves its AABB (axis-aligned bounding box) after transformation:
+The following code demonstrates how to use **Matter.cpp** with **SFML** to create a simple physics simulation with a box and multiple balls.
 
 ```cpp
-#include "MATTER/objects/Polygon.h"
+#include <SFML/Graphics.hpp>
+#include <MATTER/Matter.h>
+#include <memory>
+#include <vector>
+#include <cstdlib>
 
 int main() {
-    std::vector<Vector2f> vertices = {
-        { -50, -50 }, { 50, -50 }, { 50, 50 }, { -50, 50 }
-    };
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Physics Simulation");
+    World world;
+    world.setGravity({0, 98.1f});
+
+    std::vector<std::unique_ptr<Box>> boxes;
+    boxes.push_back(std::make_unique<Box>(Vector2f(400, 10), 800, 20)); // Ground
+    boxes.back()->setInert(true);
     
-    Polygon polygon({100, 100}, vertices);
-    polygon.update(1.0f / 60.0f); // Physics update
+    std::vector<std::unique_ptr<Ball>> balls;
+    for (int i = 0; i < 3; ++i) {
+        auto ball = std::make_unique<Ball>(Vector2f(400, 100 + i * 50), 16);
+        world.addRigidBody(ball.get());
+        balls.push_back(std::move(ball));
+    }
     
-    AABB bounds = polygon.getAABB();
-    std::cout << "AABB Min: (" << bounds.min.x << ", " << bounds.min.y << ")\n";
-    std::cout << "AABB Max: (" << bounds.max.x << ", " << bounds.max.y << ")\n";
-    
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        world.update(1.0f / 60.0f);
+        window.clear();
+        
+        for (auto& ball : balls) {
+            sf::CircleShape shape(ball->getRadius());
+            shape.setOrigin(ball->getRadius(), ball->getRadius());
+            shape.setPosition(ball->getPosition().x, ball->getPosition().y);
+            shape.setFillColor(sf::Color::Green);
+            window.draw(shape);
+        }
+        
+        window.display();
+    }
     return 0;
 }
-```
-
-### 🔄 Example: Dynamic Updates
-
-```cpp
-polygon.applyForce(Vector2f(10.0f, -5.0f)); // Apply force
-polygon.update(1.0f / 60.0f); // Physics update
 ```
 
 ---
 
 ## 📌 Examples & Demos
 
-- **Box & Polygon**: Collision simulation between rigid shapes.
-- **Transformation**: Polygon rotation and scaling.
+- **Rigid Body Simulation**: Boxes and balls interacting with gravity.
+- **Collision Handling**: Real-time collision response.
+- **SFML Rendering**: Visualize physics simulations.
 
 ---
 
