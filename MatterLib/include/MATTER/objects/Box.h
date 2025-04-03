@@ -2,6 +2,8 @@
 // Created by adrian on 26/02/25.
 //
 
+#pragma once
+
 #ifndef BOX_H
 #define BOX_H
 

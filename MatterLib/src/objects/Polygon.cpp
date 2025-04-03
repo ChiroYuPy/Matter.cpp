@@ -51,3 +51,35 @@ std::vector<Vector2f> Polygon::getVertices() const {
 
     return transformedVertices;
 }
+
+[[nodiscard]] float Polygon::getInertia() const {
+    float inertia = 0.0f;
+    float area = 0.0f;
+
+    const size_t numVertices = vertices.size();
+
+    for (size_t i = 0; i < numVertices; i++) {
+        const size_t next = (i + 1) % numVertices;
+
+        const float xi = vertices[i].x;
+        const float yi = vertices[i].y;
+        const float xi1 = vertices[next].x;
+        const float yi1 = vertices[next].y;
+
+        const float crossProduct = xi * yi1 - xi1 * yi;
+
+        area += crossProduct;
+
+        inertia += (xi * xi + yi * yi + xi * xi1 + yi * yi1 + xi1 * xi1 + yi1 * yi1) * crossProduct;
+    }
+
+    area *= 0.5f;
+
+    if (area == 0) return 0.0f;
+
+    inertia /= (6.0f * area);
+
+    inertia *= mass;
+
+    return inertia;
+}

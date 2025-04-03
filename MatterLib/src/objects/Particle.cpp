@@ -5,7 +5,7 @@
 #include "MATTER/objects/Particle.h"
 
 Particle::Particle(const Vector2f position)
-    : position(position), velocity(0, 0), acceleration(0, 0), inert(false), active(true), mass(1) {
+    : position(position), velocity(0, 0), acceleration(0, 0), inert(false), active(true), mass(1), invertedMass(1) {
 }
 
 void Particle::applyForce(const Vector2f &force) {
@@ -41,4 +41,8 @@ void Particle::setActive(const bool newActive) { active = newActive; }
 
 [[nodiscard]] float Particle::getMass() const { if (isInert()) { return std::numeric_limits<float>::infinity(); } return mass; }
 
-void Particle::setMass(const float newMass) { mass = newMass; }
+void Particle::setMass(const float newMass) {
+    mass = newMass;
+    if (mass > 0) invertedMass = 1 / mass;
+    else invertedMass = std::numeric_limits<float>::infinity();
+}

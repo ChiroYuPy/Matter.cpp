@@ -2,6 +2,8 @@
 // Created by adrian on 26/02/25.
 //
 
+#pragma once
+
 #include <vector>
 
 #ifndef POLYGON_H
@@ -24,6 +26,8 @@ public:
     [[nodiscard]] std::vector<Vector2f> getVertices() const;
 
     [[nodiscard]] BodyType getType() const override { return BodyType::Polygon; }
+
+    [[nodiscard]] float getInertia() const override;
 };
 
 #endif // POLYGON_H

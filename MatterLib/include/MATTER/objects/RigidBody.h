@@ -21,21 +21,27 @@ public:
     [[nodiscard]] virtual BodyType getType() const = 0;
 
     void setRestitution(float newRestitution);
-
     [[nodiscard]] float getRestitution() const;
 
     void setFriction(float newFriction);
-
     [[nodiscard]] float getFriction() const;
 
     void setAngle(float newAngle);
-
     [[nodiscard]] float getAngle() const;
+
+    void setAngularVelocity(float newAngularVelocity);
+    [[nodiscard]] float getAngularVelocity() const;
+
+    void setInertia(float newInertia);
+    [[nodiscard]] virtual float getInertia() const = 0;
 
 protected:
     float restitution;
     float friction;
     float angle;
+    float angularVelocity;
+    float inertia;
+    float invertedInertia;
 };
 
 #endif // RIGIDBODY_H

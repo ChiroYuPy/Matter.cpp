@@ -13,8 +13,8 @@ public:
 
     void update(float dt) const;
 
-    Particle *GetBodyA() const { return &objA; }
-    Particle *GetBodyB() const { return &objB; }
+    [[nodiscard]] Particle *GetBodyA() const { return &objA; }
+    [[nodiscard]] Particle *GetBodyB() const { return &objB; }
 
 private:
     Particle &objA;

@@ -34,6 +34,7 @@ public:
     void setActive(bool newActive);
 
     [[nodiscard]] float getMass() const;
+    [[nodiscard]] Vector2f getInvertedMass() const;
     void setMass(float newMass);
 
 protected:
@@ -43,6 +44,7 @@ protected:
     bool inert;
     bool active;
     float mass;
+    float invertedMass{};
 };
 
 #endif // PPARTICLE_H
