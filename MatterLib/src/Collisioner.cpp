@@ -2,7 +2,7 @@
 #include <cmath>
 
 CollisionInfo Collisioner::TestCollision(RigidBody *rb1, RigidBody *rb2) {
-    auto collisionInfo = CollisionInfo(false, Vector2f(), 0.0f);
+    CollisionInfo collisionInfo;
 
     if (const auto *ball1 = dynamic_cast<Ball *>(rb1)) {
         if (const auto *ball2 = dynamic_cast<Ball *>(rb2)) {
@@ -28,13 +28,16 @@ CollisionInfo Collisioner::TestBallsCollision(const Ball *ball1, const Ball *bal
     const float radiusSum = ball1->getRadius() + ball2->getRadius();
     const float distLength = Vector2f::Length(distance);
 
-    if (distLength <= radiusSum) {
-        const Vector2 normal = distance / distLength;
-        const float depth = radiusSum - distLength;
-        return CollisionInfo(true, normal, depth);
-    }
+    if (distLength > radiusSum) return CollisionInfo();
 
-    return CollisionInfo();
+    const Vector2 normal = distance / distLength;
+    const float depth = radiusSum - distLength;
+
+    std::vector<Vector2f> contactPoints;
+    Vector2f contactPoint = findBallsContactPoint(ball1, ball2);
+    contactPoints.emplace_back(contactPoint);
+
+    return CollisionInfo(true, normal, depth, contactPoints);
 }
 
 CollisionInfo Collisioner::TestBallPolygonCollision(const Ball *ball, const Polygon *poly) {
@@ -91,7 +94,11 @@ CollisionInfo Collisioner::TestBallPolygonCollision(const Ball *ball, const Poly
         normal = -normal;
     }
 
-    return CollisionInfo(true, normal, depth);
+    std::vector<Vector2f> contactPoints;
+    Vector2f contactPoint = findBallPolygonContactPoint(ball, poly);
+    contactPoints.emplace_back(contactPoint);
+
+    return CollisionInfo(true, normal, depth, contactPoints);
 }
 
 CollisionInfo Collisioner::TestPolygonsCollision(const Polygon *poly1, const Polygon *poly2) {
@@ -141,7 +148,12 @@ CollisionInfo Collisioner::TestPolygonsCollision(const Polygon *poly1, const Pol
         }
     }
 
-    return CollisionInfo(true, normal, depth);
+    std::vector<Vector2f> contactPoints;
+    auto [fst, snd] = findPolygonsContactPoints(poly1, poly2);
+    contactPoints.emplace_back(fst);
+    contactPoints.emplace_back(snd);
+
+    return CollisionInfo(true, normal, depth, contactPoints);
 }
 
 std::pair<float, float> Collisioner::projectVertices(const std::vector<Vector2f>& vertices, const Vector2f& axis) {
@@ -186,4 +198,22 @@ size_t Collisioner::findClosestPointOnPolygon(const Vector2f &circleCenter, cons
     }
 
     return result;
+}
+
+Vector2f Collisioner::findBallsContactPoint(const Ball *rb1, const Ball *rb2) {
+    const Vector2f ab = rb2->getPosition() - rb1->getPosition();
+    const Vector2f dir = Vector2f::Normalize(ab);
+    const Vector2f contactPoint = rb1->getPosition() + dir * rb1->getRadius();
+
+    return contactPoint;
+}
+
+Vector2f Collisioner::findBallPolygonContactPoint(const Ball *rb1, const Polygon *rb2) {
+    const Vector2f contactPoint;
+    return contactPoint;
+}
+
+std::pair<Vector2f, Vector2f> Collisioner::findPolygonsContactPoints(const Polygon *rb1, const Polygon *rb2) {
+    const Vector2f contactPoint;
+    return {contactPoint, contactPoint};
 }

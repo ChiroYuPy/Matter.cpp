@@ -38,6 +38,8 @@ void Solver::ApplySeparation(RigidBody *bodyA, RigidBody *bodyB, const Collision
 // }
 
 void Solver::ApplyImpulse(RigidBody *bodyA, RigidBody *bodyB, const CollisionInfo &collision) {
+
+
     // Calcul de la vitesse relative entre les deux corps
     const Vector2f relativeVelocity = bodyA->getVelocity() - bodyB->getVelocity();
 

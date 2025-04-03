@@ -19,16 +19,16 @@ public:
 
 private:
     static CollisionInfo TestBallsCollision(const Ball *ball1, const Ball *ball2);
-
     static CollisionInfo TestBallPolygonCollision(const Ball *ball, const Polygon *poly);
-
     static CollisionInfo TestPolygonsCollision(const Polygon *poly1, const Polygon *poly2);
 
     static std::pair<float, float> projectVertices(const std::vector<Vector2f> &vertices, const Vector2f &axis);
-
     static std::pair<float, float> projectCircle(const Vector2f &center, float radius, const Vector2f &axis);
-
     static size_t findClosestPointOnPolygon(const Vector2f &circleCenter, const std::vector<Vector2f> &vertices);
+
+    static Vector2f findBallsContactPoint(const Ball *rb1, const Ball *rb2);
+    static Vector2f findBallPolygonContactPoint(const Ball *rb1, const Polygon *rb2);
+    static std::pair<Vector2f, Vector2f> findPolygonsContactPoints(const Polygon *rb1, const Polygon *rb2);
 };
 
 #endif // COLLISIONER_H

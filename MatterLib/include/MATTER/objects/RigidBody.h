@@ -14,7 +14,7 @@ enum class BodyType { Ball, Polygon };
 
 class RigidBody : public Particle {
 public:
-    RigidBody(Vector2f position);
+    explicit RigidBody(Vector2f position);
 
     [[nodiscard]] virtual AABB getAABB() const = 0;
 
