@@ -30,15 +30,20 @@ int main() {
     auto wall4 = std::make_unique<Box>(Vector2f(windowWidth - 10, windowHeight / 2), 20, windowHeight);
     wall4->setInert(true);
 
-    auto dynBox = std::make_unique<Box>(Vector2f(windowWidth / 2, windowHeight / 2), 50, 50); // Une boîte dynamique
-    dynBox->setInert(false);
+    auto dynBox1 = std::make_unique<Box>(Vector2f(windowWidth / 2, windowHeight / 2 + 100), 64, 64);
+    dynBox1->setInert(false);
+
+    auto dynBox2 = std::make_unique<Box>(Vector2f(windowWidth / 2, windowHeight / 2), 64, 64);
+    dynBox2->setInert(false);
+    dynBox1->setAngle(45);
 
     std::vector<std::unique_ptr<Box>> boxs;
     boxs.push_back(std::move(wall1));
     boxs.push_back(std::move(wall2));
     boxs.push_back(std::move(wall3));
     boxs.push_back(std::move(wall4));
-    boxs.push_back(std::move(dynBox));
+    boxs.push_back(std::move(dynBox1));
+    boxs.push_back(std::move(dynBox2));
 
     for (auto& box : boxs) {
         world.addRigidBody(box.get());
@@ -78,17 +83,55 @@ int main() {
             ballShape.setPosition(ball->getPosition().x, ball->getPosition().y);
             ballShape.setFillColor(sf::Color::Green);
             window.draw(ballShape);
+
+            // Dessiner la ligne de rotation
+            float angle_deg = ball->getAngle(); // Angle en degrés
+            float angle_rad = angle_deg * (3.14159265358979f / 180.0f); // Conversion en radians
+            float length = radius; // La longueur de la ligne (par exemple, égale au rayon de la balle)
+
+            // Calcul de la direction à partir de l'angle
+            float line_x = ball->getPosition().x + length * cos(angle_rad);
+            float line_y = ball->getPosition().y + length * sin(angle_rad);
+
+            // Créer la ligne
+            sf::Vertex line[] = {
+                sf::Vertex(sf::Vector2f(ball->getPosition().x, ball->getPosition().y)),
+                sf::Vertex(sf::Vector2f(line_x, line_y))
+            };
+
+            window.draw(line, 2, sf::Lines);
         }
 
+        // Dessiner les boîtes
         for (auto& box : boxs) {
+            // box->setAngle(box->getAngle() + dt);
             float width = box->getWidth();
             float height = box->getHeight();
             sf::RectangleShape rectangleShape(sf::Vector2f(width, height));
             rectangleShape.setOrigin({width / 2, height / 2});
+            rectangleShape.setRotation(box->getAngle()); // L'angle est déjà en degrés
             rectangleShape.setPosition(box->getPosition().x, box->getPosition().y);
             rectangleShape.setFillColor(sf::Color::Blue);
             window.draw(rectangleShape);
+
+            // Dessiner la ligne de rotation
+            float angle_deg = box->getAngle(); // Angle en degrés
+            float angle_rad = angle_deg * (3.14159265358979f / 180.0f); // Conversion en radians
+            float length = width / 2; // La longueur de la ligne (par exemple, égale à la moitié de la largeur de la boîte)
+
+            // Calcul de la direction à partir de l'angle
+            float line_x = box->getPosition().x + length * cos(angle_rad);
+            float line_y = box->getPosition().y + length * sin(angle_rad);
+
+            // Créer la ligne
+            sf::Vertex line[] = {
+                sf::Vertex(sf::Vector2f(box->getPosition().x, box->getPosition().y)),
+                sf::Vertex(sf::Vector2f(line_x, line_y))
+            };
+
+            window.draw(line, 2, sf::Lines);
         }
+
 
         window.display();
 

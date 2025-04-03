@@ -11,9 +11,14 @@ struct CollisionInfo {
     bool collided;
     Vector2f normal;
     float depth;
+    std::vector<Vector2f> contacts;
 
-    CollisionInfo(const bool collided, const Vector2f normal, const float depth) :
-    collided(collided), normal(normal), depth(depth) {}
+    explicit CollisionInfo(const bool collided = false, const Vector2f& normal = {}, const float depth = 0.0f)
+        : collided(collided), normal(normal), depth(depth) {}
+
+    void addContact(const Vector2f& contact) {
+        contacts.push_back(contact);
+    }
 };
 
 #endif //COLLISIONINFO_H

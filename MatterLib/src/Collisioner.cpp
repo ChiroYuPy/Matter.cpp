@@ -34,7 +34,7 @@ CollisionInfo Collisioner::TestBallsCollision(const Ball *ball1, const Ball *bal
         return CollisionInfo(true, normal, depth);
     }
 
-    return CollisionInfo(false, Vector2f(), 0.0f);
+    return CollisionInfo();
 }
 
 CollisionInfo Collisioner::TestBallPolygonCollision(const Ball *ball, const Polygon *poly) {
@@ -57,7 +57,7 @@ CollisionInfo Collisioner::TestBallPolygonCollision(const Ball *ball, const Poly
         auto [minB, maxB] = projectCircle(ballPos, ballRadius, axis);
 
         if (minA >= maxB || minB >= maxA) {
-            return CollisionInfo(false, Vector2f(), 0.0f);
+            return CollisionInfo();
         }
 
         if (const float axisDepth = std::min(maxB - minA, maxA - minB); axisDepth < depth) {
@@ -77,7 +77,7 @@ CollisionInfo Collisioner::TestBallPolygonCollision(const Ball *ball, const Poly
     auto [minB, maxB] = projectCircle(ballPos, ballRadius, axis);
 
     if (minA >= maxB || minB >= maxA) {
-        return CollisionInfo(false, Vector2f(), 0.0f);
+        return CollisionInfo();
     }
 
     if (const float axisDepth = std::min(maxB - minA, maxA - minB); axisDepth < depth) {
@@ -112,7 +112,7 @@ CollisionInfo Collisioner::TestPolygonsCollision(const Polygon *poly1, const Pol
         auto [minB1, maxB1] = projectVertices(vertices2, axis);
 
         if (maxA1 < minB1 || maxB1 < minA1) {
-            return CollisionInfo(false, normal, depth);
+            return CollisionInfo();
         }
 
         if (const float axisDepth = std::min(maxB1 - minA1, maxA1 - minB1); axisDepth < depth) {
@@ -132,7 +132,7 @@ CollisionInfo Collisioner::TestPolygonsCollision(const Polygon *poly1, const Pol
         auto [minB2, maxB2] = projectVertices(vertices2, axis);
 
         if (maxA2 < minB2 || maxB2 < minA2) {
-            return CollisionInfo(false, normal, depth);
+            return CollisionInfo();
         }
 
         if (const float axisDepth = std::min(maxB2 - minA2, maxA2 - minB2); axisDepth < depth) {

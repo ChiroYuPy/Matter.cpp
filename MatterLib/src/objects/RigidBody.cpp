@@ -1,4 +1,5 @@
 #include "MATTER/objects/RigidBody.h"
+#include "MATTER/math/Constant.h"
 
 RigidBody::RigidBody(const Vector2f position)
     : Particle(position), restitution(0), friction(0), angle(0) {

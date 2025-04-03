@@ -2,7 +2,11 @@
 // Created by adrian on 26/02/25.
 //
 
+#include <numbers>
+
 #include "MATTER/objects/Polygon.h"
+
+#include "MATTER/math/Constant.h"
 
 Polygon::Polygon(const Vector2f &position, const std::vector<Vector2f> &verts)
     : RigidBody(position), vertices(verts) {
@@ -29,13 +33,15 @@ AABB Polygon::getAABB() const {
     return {min, max};
 }
 
+
 std::vector<Vector2f> Polygon::getVertices() const {
     std::vector<Vector2f> transformedVertices;
     transformedVertices.reserve(vertices.size());
 
     const Vector2f position = getPosition();
-    const float cosA = std::cos(angle);
-    const float sinA = std::sin(angle);
+    const float radians = angle * (PI / 180.0f);
+    const float cosA = std::cos(radians);
+    const float sinA = std::sin(radians);
 
     for (const auto &v : vertices) {
         const float xNew = v.x * cosA - v.y * sinA;

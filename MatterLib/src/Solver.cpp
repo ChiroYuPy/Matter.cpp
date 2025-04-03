@@ -23,15 +23,42 @@ void Solver::ApplySeparation(RigidBody *bodyA, RigidBody *bodyB, const Collision
     }
 }
 
+// void Solver::ApplyImpulse(RigidBody *bodyA, RigidBody *bodyB, const CollisionInfo &collision) {
+//     const Vector2f relativeVelocity = bodyA->getVelocity() - bodyB->getVelocity();
+//
+//     if (const float velocityAlongNormal = Vector2f::Dot(relativeVelocity, collision.normal); velocityAlongNormal < 0) {
+//         const float restitution = std::min(bodyA->getRestitution(), bodyB->getRestitution());
+//         float impulse = -(1 + restitution) * velocityAlongNormal;
+//         impulse /= (1 / bodyA->getMass() + 1 / bodyB->getMass());
+//
+//         const Vector2f impulseVector = collision.normal * impulse;
+//         bodyA->setVelocity(bodyA->getVelocity() + impulseVector / bodyA->getMass());
+//         bodyB->setVelocity(bodyB->getVelocity() - impulseVector / bodyB->getMass());
+//     }
+// }
+
 void Solver::ApplyImpulse(RigidBody *bodyA, RigidBody *bodyB, const CollisionInfo &collision) {
+    // Calcul de la vitesse relative entre les deux corps
     const Vector2f relativeVelocity = bodyA->getVelocity() - bodyB->getVelocity();
 
-    if (const float velocityAlongNormal = Vector2f::Dot(relativeVelocity, collision.normal); velocityAlongNormal < 0) {
+    // Calcul de la composante de la vitesse le long de la normale de collision
+    const float velocityAlongNormal = Vector2f::Dot(relativeVelocity, collision.normal);
+
+    // Si la vitesse relative est positive (les corps s'éloignent), on n'applique pas d'impulsion
+    if (velocityAlongNormal < 0) {
+        // Calcul de la restitution (élasticité) basée sur les deux corps
         const float restitution = std::min(bodyA->getRestitution(), bodyB->getRestitution());
+
+        // Calcul de l'impulsion en fonction de la vitesse relative et de la restitution
         float impulse = -(1 + restitution) * velocityAlongNormal;
+
+        // Calcul du dénominateur prenant en compte les masses des corps
         impulse /= (1 / bodyA->getMass() + 1 / bodyB->getMass());
 
+        // Calcul du vecteur d'impulsion
         const Vector2f impulseVector = collision.normal * impulse;
+
+        // Mise à jour des vitesses des corps après l'application de l'impulsion
         bodyA->setVelocity(bodyA->getVelocity() + impulseVector / bodyA->getMass());
         bodyB->setVelocity(bodyB->getVelocity() - impulseVector / bodyB->getMass());
     }
