@@ -150,6 +150,7 @@ int main() {
             }
         }
 
+
         window.display();
 
         sf::sleep(sf::milliseconds(16));
