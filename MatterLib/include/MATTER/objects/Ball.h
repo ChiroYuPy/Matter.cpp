@@ -21,7 +21,7 @@ public:
 
     [[nodiscard]] BodyType getType() const override;
 
-    [[nodiscard]] float getInertia() const override;
+    [[nodiscard]] float calculateInertia() const override;
 
 private:
     float radius;

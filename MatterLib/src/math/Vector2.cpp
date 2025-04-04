@@ -100,6 +100,11 @@ Vector2<T> Vector2<T>::Normalize(const Vector2 &a) {
 }
 
 template<typename T>
+float Vector2<T>::Cross(const Vector2 &a, const Vector2 &b) {
+    return a.x * b.y - a.y * b.x;
+}
+
+template<typename T>
 Vector2<T> Vector2<T>::Lerp(const Vector2 &a, const Vector2 &b, const T t) {
     return a + (b - a) * t;
 }

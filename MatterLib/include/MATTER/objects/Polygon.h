@@ -27,7 +27,7 @@ public:
 
     [[nodiscard]] BodyType getType() const override { return BodyType::Polygon; }
 
-    [[nodiscard]] float getInertia() const override;
+    [[nodiscard]] float calculateInertia() const override;
 };
 
 #endif // POLYGON_H

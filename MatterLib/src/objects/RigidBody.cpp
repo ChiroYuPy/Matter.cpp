@@ -15,8 +15,23 @@ float RigidBody::getFriction() const { return friction; }
 void RigidBody::setAngle(const float newAngle) { angle = newAngle; }
 float RigidBody::getAngle() const { return angle; }
 
+void RigidBody::setAngularVelocity(const float newAngularVelocity) { angularVelocity = newAngularVelocity; }
+float RigidBody::getAngularVelocity() const { return angularVelocity; }
+
 void RigidBody::setInertia(const float newInertia) {
     inertia = newInertia;
     if (inertia > 0) invertedInertia = 1 / inertia;
     else invertedInertia = std::numeric_limits<float>::infinity();
+}
+
+float RigidBody::getInertia() const {
+    return inertia;
+}
+
+float RigidBody::getInvertedInertia() const {
+    return invertedInertia;
+}
+
+float RigidBody::calculateInertia() const {
+    return mass;
 }

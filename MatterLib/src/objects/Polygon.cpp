@@ -52,7 +52,7 @@ std::vector<Vector2f> Polygon::getVertices() const {
     return transformedVertices;
 }
 
-[[nodiscard]] float Polygon::getInertia() const {
+[[nodiscard]] float Polygon::calculateInertia() const {
     float inertia = 0.0f;
     float area = 0.0f;
 

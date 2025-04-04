@@ -125,6 +125,7 @@ void World::narrowPhase() {
     for (const CollisionPair &pair: collisionPairs) {
         if (CollisionInfo collision = Collisioner::TestCollision(pair.bodyA, pair.bodyB); collision.collided) {
             Solver::ResolveCollision(pair.bodyA, pair.bodyB, collision);
+            //TODO add collisions contact points to a vector to handle drawing of it
         }
     }
 }

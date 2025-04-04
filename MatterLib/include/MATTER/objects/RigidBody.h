@@ -33,9 +33,12 @@ public:
     [[nodiscard]] float getAngularVelocity() const;
 
     void setInertia(float newInertia);
-    [[nodiscard]] virtual float getInertia() const = 0;
+    [[nodiscard]] float getInertia() const;
+    [[nodiscard]] float getInvertedInertia() const;
 
 protected:
+    [[nodiscard]] virtual float calculateInertia() const;
+
     float restitution;
     float friction;
     float angle;

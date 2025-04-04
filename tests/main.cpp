@@ -3,6 +3,7 @@
 #include <iostream>
 #include <memory>
 #include <cstdlib>  // Pour std::rand()
+#include <MATTER/math/Constant.h>
 
 int main() {
 
@@ -35,7 +36,9 @@ int main() {
 
     auto dynBox2 = std::make_unique<Box>(Vector2f(windowWidth / 2, windowHeight / 2), 64, 64);
     dynBox2->setInert(false);
-    dynBox1->setAngle(45);
+    dynBox2->setAngle(45);
+    dynBox2->setRestitution(0);
+    dynBox1->setRestitution(0);
 
     std::vector<std::unique_ptr<Box>> boxs;
     boxs.push_back(std::move(wall1));
@@ -86,7 +89,7 @@ int main() {
 
             // Dessiner la ligne de rotation
             float angle_deg = ball->getAngle(); // Angle en degrés
-            float angle_rad = angle_deg * (3.14159265358979f / 180.0f); // Conversion en radians
+            float angle_rad = angle_deg * (PI / 180.0f); // Conversion en radians
             float length = radius; // La longueur de la ligne (par exemple, égale au rayon de la balle)
 
             // Calcul de la direction à partir de l'angle
@@ -98,6 +101,8 @@ int main() {
                 sf::Vertex(sf::Vector2f(ball->getPosition().x, ball->getPosition().y)),
                 sf::Vertex(sf::Vector2f(line_x, line_y))
             };
+
+
 
             window.draw(line, 2, sf::Lines);
         }

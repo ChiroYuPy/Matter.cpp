@@ -26,6 +26,6 @@ float Ball::getRadius() const {
     return BodyType::Ball;
 }
 
-[[nodiscard]] float Ball::getInertia() const {
+[[nodiscard]] float Ball::calculateInertia() const {
     return mass * static_cast<float>(std::pow(radius, 2)) * 0.5f;
 }

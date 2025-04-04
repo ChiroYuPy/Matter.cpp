@@ -33,6 +33,7 @@ struct Vector2 {
     static T LengthSquared(const Vector2 &a);
     static T Distance(const Vector2 &a, const Vector2 &b);
     static Vector2 Normalize(const Vector2 &a);
+    static float Cross(const Vector2 &a, const Vector2 &b);
     static Vector2 Lerp(const Vector2 &a, const Vector2 &b, T t);
 };
 
