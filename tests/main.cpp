@@ -54,7 +54,7 @@ int main() {
 
     // Création des balles (en utilisant un vecteur de pointeurs)
     std::vector<std::unique_ptr<Ball>> balls;
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 32; ++i) {
         // Position aléatoire des balles
         float randomX = static_cast<float>(window.getSize().x) * (0.25f + static_cast<float>(std::rand() * 0.5) / RAND_MAX);
         float randomY = static_cast<float>(window.getSize().y) * (0.25f + static_cast<float>(std::rand() * 0.5) / RAND_MAX);
@@ -78,14 +78,17 @@ int main() {
 
         window.clear();
 
+        sf::CircleShape circleShape(1);
+        sf::RectangleShape rectangleShape({});
+
         // Dessiner les balles
         for (auto& ball : balls) {
             float radius = ball->getRadius();
-            sf::CircleShape ballShape(radius);
-            ballShape.setOrigin({radius, radius});
-            ballShape.setPosition(ball->getPosition().x, ball->getPosition().y);
-            ballShape.setFillColor(sf::Color::Green);
-            window.draw(ballShape);
+            circleShape.setRadius(radius);
+            circleShape.setOrigin({radius, radius});
+            circleShape.setPosition(ball->getPosition().x, ball->getPosition().y);
+            circleShape.setFillColor(sf::Color::Green);
+            window.draw(circleShape);
 
             // Dessiner la ligne de rotation
             float angle_deg = ball->getAngle(); // Angle en degrés
@@ -102,8 +105,6 @@ int main() {
                 sf::Vertex(sf::Vector2f(line_x, line_y))
             };
 
-
-
             window.draw(line, 2, sf::Lines);
         }
 
@@ -112,7 +113,7 @@ int main() {
             // box->setAngle(box->getAngle() + dt);
             float width = box->getWidth();
             float height = box->getHeight();
-            sf::RectangleShape rectangleShape(sf::Vector2f(width, height));
+            rectangleShape.setSize({width, height});
             rectangleShape.setOrigin({width / 2, height / 2});
             rectangleShape.setRotation(box->getAngle()); // L'angle est déjà en degrés
             rectangleShape.setPosition(box->getPosition().x, box->getPosition().y);
@@ -137,6 +138,17 @@ int main() {
             window.draw(line, 2, sf::Lines);
         }
 
+        auto collisionInfos = world.GetCollisionInfos();
+        for (const CollisionInfo& collisionInfo : collisionInfos) {
+            for (const Vector2f contactPos : collisionInfo.contacts) {
+                float radius = 4.f;
+                circleShape.setRadius(radius);
+                circleShape.setOrigin({radius, radius});
+                circleShape.setPosition(contactPos.x, contactPos.y);
+                circleShape.setFillColor(sf::Color::Red);
+                window.draw(circleShape);
+            }
+        }
 
         window.display();
 

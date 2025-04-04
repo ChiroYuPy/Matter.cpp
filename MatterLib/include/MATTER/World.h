@@ -48,6 +48,8 @@ public:
 
     [[nodiscard]] const std::vector<Join *>& GetJoins() const;
 
+    [[nodiscard]] const std::vector<CollisionInfo>& GetCollisionInfos() const;
+
 private:
     void stepObjects(float dt);
 
@@ -71,6 +73,7 @@ private:
     Vector2f gravity;
 
     std::vector<CollisionPair> collisionPairs;
+    std::vector<CollisionInfo> collisionInfos;
 
     std::vector<Particle *> particles;
     std::vector<RigidBody *> rigidBodies;

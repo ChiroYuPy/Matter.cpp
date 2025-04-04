@@ -122,10 +122,11 @@ void World::broadPhase() {
 }
 
 void World::narrowPhase() {
+    collisionInfos.clear();
     for (const CollisionPair &pair: collisionPairs) {
         if (CollisionInfo collision = Collisioner::TestCollision(pair.bodyA, pair.bodyB); collision.collided) {
             Solver::ResolveCollision(pair.bodyA, pair.bodyB, collision);
-            //TODO add collisions contact points to a vector to handle drawing of it
+            collisionInfos.emplace_back(collision);
         }
     }
 }
@@ -160,3 +161,5 @@ void World::setGravity(const Vector2f newGravity) { gravity = newGravity; }
 [[nodiscard]] const std::vector<RigidBody *>& World::GetRigidBodies() const { return rigidBodies; }
 
 [[nodiscard]] const std::vector<Join *>& World::GetJoins() const { return joins; }
+
+[[nodiscard]] const std::vector<CollisionInfo>& World::GetCollisionInfos() const { return collisionInfos; }
